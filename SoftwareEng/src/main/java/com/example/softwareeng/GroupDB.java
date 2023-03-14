@@ -5,7 +5,7 @@ public class GroupDB {
 	
 	public GroupDB(){
 		database = new DBConnection();
-		database.Connect("SoftwareEngineering\\TaskManagerDB.sqlite");
+		database.Connect("TaskManagerDB.sqlite");
 	}
 	
 	
@@ -14,12 +14,9 @@ public class GroupDB {
 	* Sends error string to System.out if the DBConnection reports a failure
 	*
 	* @param  sm  A StudentMark object with the name and mark
-
-	public void AddStudent(Booking sm) {
-		String sqlString = new String("INSERT INTO studentMark VALUES('");
-		sqlString = sqlString + sm.getName()+"', ";
-		sqlString = sqlString+   Integer.toString(sm.getMark());
-		sqlString = sqlString+  ");";
+*/
+	public void AddStudent(String firstname, String lastname) {
+		String sqlString = new String("INSERT INTO usernames (firstName,lastName) VALUES( '"+firstname+"', '"+lastname+"');");
 		
 		boolean success = database.RunSQL(sqlString);
 		
