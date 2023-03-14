@@ -1,5 +1,8 @@
 package com.example.softwareeng;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class GroupDB {
 	private DBConnection database;
 	
@@ -23,6 +26,18 @@ public class GroupDB {
 		if(!success) {
 			System.out.println("Failed to run query: "+sqlString);
 		}
+	}
+	public int GetCount() {
+		String sqlString = new String("SELECT COUNT(firstName) FROM usernames");
+		int countOfColumn = 0;
+		ResultSet value = database.RunSQLQuery(sqlString);
+		try {
+			countOfColumn = value.getInt(1);
+		}
+		catch (Exception e){
+			System.out.println("An error occurred while putting value of column into countOfColumn");
+		}
+		return countOfColumn;
 	}
 	
 	/**

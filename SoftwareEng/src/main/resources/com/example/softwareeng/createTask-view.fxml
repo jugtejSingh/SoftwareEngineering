@@ -4,13 +4,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="366.0" prefWidth="370.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.CreateTaskController">
+<AnchorPane fx:id="ParentanchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="366.0" prefWidth="370.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.CreateTaskController">
    <children>
-      <Button fx:id="inputFirstNLast" layoutX="138.0" layoutY="259.0" mnemonicParsing="false" onMouseClicked="#enteringFirstLast" prefHeight="37.0" prefWidth="91.0" text="Button" />
-      <Label alignment="BOTTOM_CENTER" layoutX="-1.0" layoutY="-2.0" prefHeight="58.0" prefWidth="370.0" text="Create a new Task" />
-      <TextField fx:id="firstName" layoutX="142.0" layoutY="98.0" style="-fx-background-color: pink;" text="First Name" />
-      <TextField fx:id="lastName" layoutX="143.0" layoutY="158.0" style="-fx-background-color: pink;" text="Last Name" />
+      <VBox fx:id="labelVbox" layoutX="164.0" layoutY="204.0" prefHeight="74.0" prefWidth="151.0" />
+      <TextField fx:id="lastName" layoutX="164.0" layoutY="170.0" style="-fx-background-color: pink;" text="Last Name" />
+      <TextField fx:id="firstName" layoutX="164.0" layoutY="120.0" style="-fx-background-color: pink;" text="First Name" />
+      <Label alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="370.0" text="Create a new Task" />
+      <Button fx:id="inputFirstNLast" layoutX="139.0" layoutY="314.0" mnemonicParsing="false" onMouseClicked="#enteringFirstLast" prefHeight="37.0" prefWidth="91.0" text="Button" />
    </children>
 </AnchorPane>
