@@ -3,6 +3,7 @@ package com.example.softwareeng;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -19,10 +20,10 @@ public class CreateTaskController implements Initializable {
     @FXML
     AnchorPane ParentanchorPane;
 
-    @FXML
-    VBox labelVbox;
     GroupDB group = new GroupDB();
     public TextField textField;
+    @FXML
+    ChoiceBox choiceBox;
 
     @FXML
     public void enteringFirstLast(Event e) {
@@ -30,10 +31,17 @@ public class CreateTaskController implements Initializable {
         String last = lastName.getText();
         group.AddStudent(first, last);
         System.out.println("The values inputted were " + first + " " + last + "");
+        String p = (String)choiceBox.getValue();
+        System.out.println(p);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        choiceBox.getItems().add("Hello");
+        choiceBox.getItems().add("Hello1");
+        choiceBox.getItems().add("Hello2");
+        choiceBox.setValue("Apples");
+        /*
         GroupDB db = new GroupDB();
         int numberOfRows = db.GetCount();
         for (int i = 0; i < numberOfRows; i++) {
@@ -42,5 +50,6 @@ public class CreateTaskController implements Initializable {
             textField = new TextField(string);
             labelVbox.getChildren().add(textField);
         }
+        */
     }
 }
