@@ -1,55 +1,64 @@
 package com.example.softwareeng;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class CreateTaskController implements Initializable {
     @FXML
-    TextField firstName;
+    TextField taskName;
     @FXML
-    TextField lastName;
+    ChoiceBox<String> choiceBox;
     @FXML
-    AnchorPane ParentanchorPane;
+    TextField timeEstimate;
+    static int groupSelectedID = 0;
+    String usersName = "";
+    int gettingEstimate = 0;
 
-    GroupDB group = new GroupDB();
-    public TextField textField;
-    @FXML
-    ChoiceBox choiceBox;
-
-    @FXML
-    public void enteringFirstLast(Event e) {
-        String first = firstName.getText();
-        String last = lastName.getText();
-        group.AddStudent(first, last);
-        System.out.println("The values inputted were " + first + " " + last + "");
-        String p = (String)choiceBox.getValue();
-        System.out.println(p);
+    CreateTaskDB db = new CreateTaskDB();
+//Initializer for data in the choice boxes
+    void AddingUsersToChoice(){
+        ArrayList<Users> users = new ArrayList<>(db.GetUsers());
+        for (int i = 0; i < users.size(); i++) {
+            Users newUser = users.get(i);
+            choiceBox.setValue(users.get(0).getUserName());
+            choiceBox.getItems().add(newUser.getUserName());
+        }
     }
-
+    //Make the groupID static everytime they click it, send it to the controller class
+    @FXML
+    //Event handler for the button
+    void addingTasksAndEstimates(){
+        gettingEstimate = Integer.parseInt(timeEstimate.getText());
+        String tasksName = taskName.getText();
+        int groupID = groupSelectedID;
+        System.out.println(gettingEstimate + " "+ groupID);
+        db.InsertIntoTask(groupSelectedID,tasksName,choiceBox.getValue(),gettingEstimate);
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        choiceBox.getItems().add("Hello");
-        choiceBox.getItems().add("Hello1");
-        choiceBox.getItems().add("Hello2");
-        choiceBox.setValue("Apples");
-        /*
-        GroupDB db = new GroupDB();
-        int numberOfRows = db.GetCount();
-        for (int i = 0; i < numberOfRows; i++) {
-            System.out.println(i);
-            String string = Integer.toString(i);
-            textField = new TextField(string);
-            labelVbox.getChildren().add(textField);
-        }
-        */
+        timeEstimate.setText("0");
+        AddingUsersToChoice();
+        CreateTaskDB createTaskDB = new CreateTaskDB();
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                String nameForEstimate = choiceBox.getItems().get((Integer)t1);
+                int EstimatedTime = createTaskDB.GetTimeEstimates(nameForEstimate);
+                timeEstimate.setText(Integer.toString(EstimatedTime));
+            }
+        });
     }
 }

@@ -6,13 +6,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-
 <Pane prefHeight="405.0" prefWidth="416.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.CreateTaskController">
    <children>
-      <ChoiceBox fx:id="choiceBox" layoutX="208.0" layoutY="252.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="choiceBox" layoutX="193.0" layoutY="203.0" prefWidth="150.0" />
       <Label alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="409.0" text="Create a new Task" />
-      <TextField fx:id="lastName" layoutX="197.0" layoutY="177.0" style="-fx-background-color: pink;" text="Last Name" />
-      <TextField fx:id="firstName" layoutX="197.0" layoutY="119.0" style="-fx-background-color: pink;" text="First Name" />
-      <Button fx:id="inputFirstNLast" layoutX="151.0" layoutY="324.0" mnemonicParsing="false" onMouseClicked="#enteringFirstLast" prefHeight="37.0" prefWidth="91.0" text="Button" />
+      <TextField fx:id="taskName" layoutX="192.0" layoutY="121.0" style="-fx-background-color: pink;" />
+      <Button fx:id="inputTasks" layoutX="159.0" layoutY="323.0" mnemonicParsing="false" onMouseClicked="#addingTasksAndEstimates" prefHeight="37.0" prefWidth="91.0" text="Submit" />
+      <Label layoutX="59.0" layoutY="125.0" text="Name of the task" />
+      <Label layoutX="37.0" layoutY="208.0" text="User's time estimate" />
+      <TextField fx:id="timeEstimate" layoutX="239.0" layoutY="271.0" prefHeight="26.0" prefWidth="31.0" />
+      <Label layoutX="65.0" layoutY="275.0" text="Time in minutes" />
    </children>
 </Pane>

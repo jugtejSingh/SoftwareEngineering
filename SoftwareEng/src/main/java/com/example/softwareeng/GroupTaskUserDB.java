@@ -1,13 +1,12 @@
 package com.example.softwareeng;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class GroupDB {
+public class GroupTaskUserDB {
 	private DBConnection database;
 	
-	public GroupDB(){
+	public GroupTaskUserDB(){
 		database = new DBConnection();
 		database.Connect("TaskManagerDB.sqlite");
 	}
@@ -17,15 +16,6 @@ public class GroupDB {
 	*
 	* @param  sm  A StudentMark object with the name and mark
 */
-	public void AddStudent(String firstname, String lastname) {
-		String sqlString = new String("INSERT INTO usernames (firstName,lastName) VALUES( '"+firstname+"', '"+lastname+"');");
-		
-		boolean success = database.RunSQL(sqlString);
-		
-		if(!success) {
-			System.out.println("Failed to run query: "+sqlString);
-		}
-	}
 	public ArrayList<Group> GetGroups() {
 		String sqlString = new String("SELECT groupName, groupID from groups;");
 		ResultSet groups = database.RunSQLQuery(sqlString);
@@ -60,18 +50,6 @@ public class GroupDB {
 			System.out.println("An error occurred while putting value of column into countOfColumn");
 		}
 		return answer;
-	}
-	public int GetCount() {
-		String sqlString = new String("SELECT COUNT(firstName) FROM usernames");
-		int countOfColumn = 0;
-		ResultSet value = database.RunSQLQuery(sqlString);
-		try {
-			countOfColumn = value.getInt(1);
-		}
-		catch (Exception e){
-			System.out.println("An error occurred while putting value of column into countOfColumn");
-		}
-		return countOfColumn;
 	}
 	
 	/**

@@ -2,17 +2,21 @@ package com.example.softwareeng;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class GroupScreenController implements Initializable {
+public class GroupTaskUserController implements Initializable {
     @FXML
     VBox vboxForTasks;
 
@@ -20,14 +24,15 @@ public class GroupScreenController implements Initializable {
     ScrollPane scrollPaneTasks;
     @FXML
     VBox groupsVbox;
-    GroupDB groupConn;
+    GroupTaskUserDB groupConn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Code to display the groups on the side which can be clicked on
         int groupIDforTasks = 1;
+        CreateTaskController.groupSelectedID = groupIDforTasks;
         DisplayingTasks(groupIDforTasks);
-        groupConn = new GroupDB();
+        groupConn = new GroupTaskUserDB();
         Label label1;
         ArrayList<Group> groupArrayList = new ArrayList<>(groupConn.GetGroups());
         for (int p = 0; p < groupArrayList.size(); p++) {
@@ -38,6 +43,7 @@ public class GroupScreenController implements Initializable {
                 @Override
                 public void handle(MouseEvent e) {
                 int idOfGroup = groupName.getId();
+                CreateTaskController.groupSelectedID = idOfGroup;
                 DisplayingTasks(groupName.getId());
                     System.out.println(idOfGroup);
                 }
@@ -50,7 +56,7 @@ public class GroupScreenController implements Initializable {
         }
     }
     void DisplayingTasks(int groupIdForTasks){
-        groupConn = new GroupDB();
+        groupConn = new GroupTaskUserDB();
         vboxForTasks.getChildren().clear();
         ArrayList<Tasks> taskArrayList = new ArrayList<>(groupConn.GetTasks(groupIdForTasks));
         for (int i = 0; i < taskArrayList.size(); i++) {
@@ -64,5 +70,15 @@ public class GroupScreenController implements Initializable {
             });
             vboxForTasks.getChildren().add(label);
         }
+    }@FXML
+    void makingTaskAdding() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskScreen.class.getResource("createTask-view.fxml"));
+        String css = this.getClass().getResource("createTask.css").toExternalForm();
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(css);
+        Stage stage = new Stage();
+        stage.setTitle("Hello!");
+        stage.setScene(scene);
+        stage.show();
     }
-}
+    }
