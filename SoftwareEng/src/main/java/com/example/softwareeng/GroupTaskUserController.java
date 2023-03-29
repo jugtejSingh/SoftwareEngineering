@@ -5,9 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -45,7 +47,6 @@ public class GroupTaskUserController implements Initializable {
                 int idOfGroup = groupName.getId();
                 CreateTaskController.groupSelectedID = idOfGroup;
                 DisplayingTasks(groupName.getId());
-                    System.out.println(idOfGroup);
                 }
             });
 
@@ -60,15 +61,13 @@ public class GroupTaskUserController implements Initializable {
         vboxForTasks.getChildren().clear();
         ArrayList<Tasks> taskArrayList = new ArrayList<>(groupConn.GetTasks(groupIdForTasks));
         for (int i = 0; i < taskArrayList.size(); i++) {
+            HBox hboxesForCheckboxes = new HBox();
+            vboxForTasks.getChildren().add(hboxesForCheckboxes);
             Tasks task = taskArrayList.get(i);
             Label label = new Label(task.getTaskName());
-            label.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    System.out.println(task.getTaskID());
-                }
-            });
-            vboxForTasks.getChildren().add(label);
+            hboxesForCheckboxes.getChildren().add(label);
+            CheckBox checkboxes = new CheckBox();
+            hboxesForCheckboxes.getChildren().add(checkboxes);
         }
     }@FXML
     void makingTaskAdding() throws IOException {

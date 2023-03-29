@@ -1,16 +1,16 @@
 package com.example.softwareeng;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CreateTaskDB {
     private DBConnection database;
 
-    public CreateTaskDB(){
+    public CreateTaskDB() {
         database = new DBConnection();
         database.Connect("TaskManagerDB.sqlite");
     }
+
     public ArrayList<Users> GetUsers() {
         String sqlString = new String("SELECT userID, name from users;");
         ResultSet users = database.RunSQLQuery(sqlString);
@@ -22,40 +22,47 @@ public class CreateTaskDB {
                 userObject.setUserName(users.getString(2));
                 finalAnswer.add(userObject);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occurred while putting value of column into countOfColumn");
         }
         return finalAnswer;
     }
-    void InsertIntoTask(int groupID,String taskName,String usersName,int estimatedTime){
+
+
+    int InsertIntoTask(int groupID, String taskName) {
         String taskIDSQL = new String("Select MAX(taskID) from tasks");
         ResultSet storingTaskID = database.RunSQLQuery(taskIDSQL);
         int taskID = 0;
         try {
             taskID = storingTaskID.getInt(1) + 1;
-            System.out.println(taskID);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error occured while getting sql data");
         }
-        System.out.println("Is this running");
-        String sqlString = new String("INSERT INTO tasks values ('"+taskID+"','"+groupID+"','"+taskName+"');");
+        String sqlString = new String("INSERT INTO tasks(taskID,groupID,taskName) values('" + taskID + "','" + groupID + "','" + taskName + "');");
         database.RunSQL(sqlString);
-        System.out.println("Is this running 2");
-        String userCount = new String("Select userID from users where name = '"+usersName+"';");
+        return taskID;
+    }
+
+    ArrayList<Integer> gettingUserIds() {
+        String userCount = new String("Select userID from users;");
         ResultSet usersIDRetrival = database.RunSQLQuery(userCount);
-        int usersIDRetrivalValue = 0;
+        ArrayList<Integer> usersID = new ArrayList<>();
         try {
-             usersIDRetrivalValue = usersIDRetrival.getInt(1);
-        }
-        catch (Exception e){
+            while (usersIDRetrival.next())
+                usersID.add(usersIDRetrival.getInt(1));
+        } catch (Exception e) {
             System.out.println("Issue with the usersIDRetrival");
         }
-        String insertingIntoTasksAndUsers = new String("INSERT INTO taskAndUsers values ('"+groupID+"','"+usersIDRetrivalValue+"','"+taskID+"','"+estimatedTime+"')");
-        database.RunSQL(sqlString);
+        return usersID;
     }
-    public int GetTimeEstimates(String username) {
+
+    void InsertIntoTaskAndUsers(ArrayList<Integer> userIDs, int groupID, ArrayList<Integer> estimatedTime, int taskID) {
+        for (int i = 0; i < userIDs.size(); i++) {
+            String insertingIntoTasksAndUsers = new String("INSERT INTO taskAndUsers values ('" + groupID + "','" + userIDs.get(i) + "','" + taskID + "','" + estimatedTime.get(i) + "')");
+            database.RunSQL(insertingIntoTasksAndUsers);
+        }
+    }
+  /*  public int GetTimeEstimates(String username) {
         String sqlString = new String("SELECT estimatedTime from taskAndUsers join users  on taskAndUsers.userID = users.userID where users.name == '"+username+"' ");
         ResultSet time = database.RunSQLQuery(sqlString);
         int timeEstimate = 0;
@@ -69,5 +76,19 @@ public class CreateTaskDB {
             System.out.println("An error occurred while putting value of column into countOfColumn " + e.getMessage());
         }
         return timeEstimate;
+    } */
+
+       public int GetMaxUserCount(){
+            String sqlString = new String("SELECT MAX(userID) from users");
+            ResultSet users = database.RunSQLQuery(sqlString);
+            int usersMax = 0;
+            try {
+                while (users.next()) {
+                    usersMax = users.getInt(1);
+                }
+            } catch (Exception e) {
+                System.out.println("An error occurred while putting value of column into countOfColumn " + e.getMessage());
+            }
+            return usersMax;
+        }
     }
-}
