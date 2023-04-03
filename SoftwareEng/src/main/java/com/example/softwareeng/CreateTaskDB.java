@@ -2,17 +2,19 @@ package com.example.softwareeng;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CreateTaskDB {
     private DBConnection database;
 
+    static int groupID = 0;
     public CreateTaskDB() {
         database = new DBConnection();
         database.Connect("TaskManagerDB.sqlite");
     }
 
     public ArrayList<Users> GetUsers() {
-        String sqlString = new String("SELECT userID, name from users;");
+        String sqlString = new String("SELECT userID, name from users where groupID = '"+groupID+"';");
         ResultSet users = database.RunSQLQuery(sqlString);
         ArrayList<Users> finalAnswer = new ArrayList<Users>();
         try {
@@ -43,24 +45,22 @@ public class CreateTaskDB {
         return taskID;
     }
 
-    ArrayList<Integer> gettingUserIds() {
-        String userCount = new String("Select userID from users;");
+    int gettingUserIds(String username) {
+        String userCount = new String("Select userID from users where name = '"+username+"';");
         ResultSet usersIDRetrival = database.RunSQLQuery(userCount);
-        ArrayList<Integer> usersID = new ArrayList<>();
+        int usersID = 0;
         try {
             while (usersIDRetrival.next())
-                usersID.add(usersIDRetrival.getInt(1));
+                usersID = usersIDRetrival.getInt(1);
         } catch (Exception e) {
             System.out.println("Issue with the usersIDRetrival");
         }
         return usersID;
     }
 
-    void InsertIntoTaskAndUsers(ArrayList<Integer> userIDs, int groupID, ArrayList<Integer> estimatedTime, int taskID) {
-        for (int i = 0; i < userIDs.size(); i++) {
-            String insertingIntoTasksAndUsers = new String("INSERT INTO taskAndUsers values ('" + groupID + "','" + userIDs.get(i) + "','" + taskID + "','" + estimatedTime.get(i) + "')");
+    void InsertIntoTaskAndUsers(int userIDs, int groupID, int estimatedTime, int taskID) {
+            String insertingIntoTasksAndUsers = new String("INSERT INTO taskAndUsers values ('" + groupID + "','" + userIDs + "','" + taskID + "','"+estimatedTime+"')");
             database.RunSQL(insertingIntoTasksAndUsers);
-        }
     }
   /*  public int GetTimeEstimates(String username) {
         String sqlString = new String("SELECT estimatedTime from taskAndUsers join users  on taskAndUsers.userID = users.userID where users.name == '"+username+"' ");
@@ -79,7 +79,7 @@ public class CreateTaskDB {
     } */
 
        public int GetMaxUserCount(){
-            String sqlString = new String("SELECT MAX(userID) from users");
+            String sqlString = new String("SELECT COUNT(userID) from users where groupID = '"+groupID+"'");
             ResultSet users = database.RunSQLQuery(sqlString);
             int usersMax = 0;
             try {
@@ -91,4 +91,24 @@ public class CreateTaskDB {
             }
             return usersMax;
         }
+    public ArrayList<String> GetUserNames(){
+        String sqlString = new String("SELECT name from users where groupID = '"+groupID+"'");
+        ResultSet users = database.RunSQLQuery(sqlString);
+        ArrayList<String> listOfUserNames = new ArrayList<String>();
+        try {
+            while (users.next()) {
+                listOfUserNames.add(users.getString(1));
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred while putting value of column into countOfColumn " + e.getMessage());
+        }
+        return listOfUserNames;
     }
+    void InsertingUsers(int groupID,String userName) {
+            int userID = GetMaxUserCount() + 1;
+            String insertingIntoUsers = new String("insert into users(userID,name,groupID)values('"+userID+"','"+userName+"','"+groupID+"')");
+            database.RunSQL(insertingIntoUsers);
+        System.out.println("it ran");
+        }
+    }
+
