@@ -2,18 +2,14 @@ package com.example.softwareeng;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class CreateTaskController implements Initializable {
@@ -24,10 +20,10 @@ public class CreateTaskController implements Initializable {
     @FXML
     TextField timeEstimate;
     static int groupSelectedID = 0;
-    String usersName = "";
-    int gettingEstimate = 0;
-
     CreateTaskDB db = new CreateTaskDB();
+    ArrayList<Integer> listForEstimates = new ArrayList<Integer>();
+    HashMap<String,Integer> mapForChoiceBox;
+    int lastNumberForHashMap = 0;
 //Initializer for data in the choice boxes
     void AddingUsersToChoice(){
         ArrayList<Users> users = new ArrayList<>(db.GetUsers());
@@ -40,25 +36,36 @@ public class CreateTaskController implements Initializable {
     //Make the groupID static everytime they click it, send it to the controller class
     @FXML
     //Event handler for the button
-    void addingTasksAndEstimates(){
-        gettingEstimate = Integer.parseInt(timeEstimate.getText());
+    void addingTasksAndEstimates() {
+        mapForChoiceBox.put(choiceBox.getItems().get((Integer)lastNumberForHashMap), Integer.parseInt(timeEstimate.getText()));
         String tasksName = taskName.getText();
-        int groupID = groupSelectedID;
-        System.out.println(gettingEstimate + " "+ groupID);
-        db.InsertIntoTask(groupSelectedID,tasksName,choiceBox.getValue(),gettingEstimate);
+        int taskID = db.InsertIntoTask(groupSelectedID, tasksName);
+        for (String names: mapForChoiceBox.keySet()){
+            int userID = db.gettingUserIds(names);
+            db.InsertIntoTaskAndUsers(userID,groupSelectedID, mapForChoiceBox.get(names), taskID);
+        }
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        mapForChoiceBox = new HashMap<String,Integer>();
+        ArrayList<String> arraylistOfNames = new ArrayList<>(db.GetUserNames());
+        for (String x: arraylistOfNames) {
+            mapForChoiceBox.put(x,0);
+            System.out.println(mapForChoiceBox.get(x));
+        }
         timeEstimate.setText("0");
         AddingUsersToChoice();
-        CreateTaskDB createTaskDB = new CreateTaskDB();
         choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                String nameForEstimate = choiceBox.getItems().get((Integer)t1);
-                int EstimatedTime = createTaskDB.GetTimeEstimates(nameForEstimate);
-                timeEstimate.setText(Integer.toString(EstimatedTime));
+                    mapForChoiceBox.put(choiceBox.getItems().get((Integer)number), Integer.parseInt(timeEstimate.getText()));
+                timeEstimate.setText(String.valueOf(mapForChoiceBox.get(choiceBox.getItems().get((Integer)t1))));
+                lastNumberForHashMap = (int) t1;
+                }
             }
-        });
+        );
+        for (String x: arraylistOfNames) {
+            System.out.println(mapForChoiceBox.get(x));
+        }
     }
 }

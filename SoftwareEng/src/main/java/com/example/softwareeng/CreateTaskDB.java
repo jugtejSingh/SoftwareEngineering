@@ -1,18 +1,21 @@
 package com.example.softwareeng;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CreateTaskDB {
     private DBConnection database;
 
-    public CreateTaskDB(){
+    static int groupID = 0;
+
+    public CreateTaskDB() {
         database = new DBConnection();
         database.Connect("TaskManagerDB.sqlite");
     }
+
     public ArrayList<Users> GetUsers() {
-        String sqlString = new String("SELECT userID, name from users;");
+        String sqlString = new String("SELECT userID, name from users where groupID = '" + groupID + "';");
         ResultSet users = database.RunSQLQuery(sqlString);
         ArrayList<Users> finalAnswer = new ArrayList<Users>();
         try {
@@ -22,52 +25,111 @@ public class CreateTaskDB {
                 userObject.setUserName(users.getString(2));
                 finalAnswer.add(userObject);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occurred while putting value of column into countOfColumn");
         }
         return finalAnswer;
     }
-    void InsertIntoTask(int groupID,String taskName,String usersName,int estimatedTime){
+
+    int InsertIntoTask(int groupID, String taskName) {
         String taskIDSQL = new String("Select MAX(taskID) from tasks");
         ResultSet storingTaskID = database.RunSQLQuery(taskIDSQL);
         int taskID = 0;
         try {
             taskID = storingTaskID.getInt(1) + 1;
-            System.out.println(taskID);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error occured while getting sql data");
         }
-        System.out.println("Is this running");
-        String sqlString = new String("INSERT INTO tasks values ('"+taskID+"','"+groupID+"','"+taskName+"');");
+        String sqlString = new String("INSERT INTO tasks(taskID,groupID,taskName) values('" + taskID + "','" + groupID + "','" + taskName + "');");
         database.RunSQL(sqlString);
-        System.out.println("Is this running 2");
-        String userCount = new String("Select userID from users where name = '"+usersName+"';");
+        return taskID;
+    }
+
+    int gettingUserIds(String username) {
+        String userCount = new String("Select userID from users where name = '" + username + "';");
         ResultSet usersIDRetrival = database.RunSQLQuery(userCount);
-        int usersIDRetrivalValue = 0;
+        int usersID = 0;
         try {
-             usersIDRetrivalValue = usersIDRetrival.getInt(1);
-        }
-        catch (Exception e){
+            while (usersIDRetrival.next())
+                usersID = usersIDRetrival.getInt(1);
+        } catch (Exception e) {
             System.out.println("Issue with the usersIDRetrival");
         }
-        String insertingIntoTasksAndUsers = new String("INSERT INTO taskAndUsers values ('"+groupID+"','"+usersIDRetrivalValue+"','"+taskID+"','"+estimatedTime+"')");
-        database.RunSQL(sqlString);
+        return usersID;
     }
-    public int GetTimeEstimates(String username) {
-        String sqlString = new String("SELECT estimatedTime from taskAndUsers join users  on taskAndUsers.userID = users.userID where users.name == '"+username+"' ");
-        ResultSet time = database.RunSQLQuery(sqlString);
-        int timeEstimate = 0;
+
+    void InsertIntoTaskAndUsers(int userIDs, int groupID, int estimatedTime, int taskID) {
+        String insertingIntoTasksAndUsers = new String("INSERT INTO taskAndUsers values ('" + groupID + "','" + userIDs + "','" + taskID + "','" + estimatedTime + "')");
+        database.RunSQL(insertingIntoTasksAndUsers);
+    }
+
+    public int GetMaxUserCount() {
+        String sqlString = new String("SELECT COUNT(userID) from users where groupID = '" + groupID + "'");
+        ResultSet users = database.RunSQLQuery(sqlString);
+        int usersMax = 0;
         try {
-            while (time.next()) {
-                System.out.println("getting value");
-                timeEstimate = time.getInt(1);
+            while (users.next()) {
+                usersMax = users.getInt(1);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occurred while putting value of column into countOfColumn " + e.getMessage());
         }
-        return timeEstimate;
+        return usersMax;
+    }
+    public int GetMaxUserID() {
+        String sqlString = new String("SELECT MAX(userID) from users");
+        ResultSet users = database.RunSQLQuery(sqlString);
+        int usersMax = 0;
+        try {
+            while (users.next()) {
+                usersMax = users.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred while putting value of column into countOfColumn " + e.getMessage());
+        }
+        return usersMax;
+    }
+
+    public ArrayList<String> GetUserNames() {
+        String sqlString = new String("SELECT name from users where groupID = '" + groupID + "'");
+        ResultSet users = database.RunSQLQuery(sqlString);
+        ArrayList<String> listOfUserNames = new ArrayList<String>();
+        try {
+            while (users.next()) {
+                listOfUserNames.add(users.getString(1));
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred while putting value of column into countOfColumn " + e.getMessage());
+        }
+        return listOfUserNames;
+    }
+
+    void InsertingUsers(int groupID, String userName) {
+        int userID = GetMaxUserID() + 1;
+        String insertingIntoUsers = new String("insert into users(userID,name,groupID)values('" + userID + "','" + userName + "','" + groupID + "')");
+        boolean value = database.RunSQL(insertingIntoUsers);
+        if(!value){
+            System.out.println("There was an issue inserting users in InsertingUsers");
+        }
+    }
+
+    public void DeleteUser(String userName) {
+        // Should probably add a message if the student does not exist.
+        String sqlStringforID = new String("Select userID FROM users WHERE name = '" + userName + "';");
+        ResultSet users = database.RunSQLQuery(sqlStringforID);
+        int userID = 0;
+        try {
+            userID = Integer.parseInt(users.getString(1));
+        } catch (Exception e) {
+            System.out.println("Error occured in deleteUser");
+        }
+        String sqlString = new String("DELETE FROM users WHERE name = '" + userName + "';");
+        boolean success = database.RunSQL(sqlString);
+        String removingFromTaskandUsers = new String("DELETE FROM taskAndUsers where userID ='" + userID + "' ");
+        if (!success) {
+            System.out.println("Failed to run query: " + sqlString);
+        }
     }
 }
+
+

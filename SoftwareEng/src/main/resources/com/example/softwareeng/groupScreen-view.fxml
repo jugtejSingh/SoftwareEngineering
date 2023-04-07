@@ -6,19 +6,22 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.GroupTaskUserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.GroupTaskUserController">
    <children>
+      <ScrollPane fx:id="scrollPaneTasks" layoutX="149.0" layoutY="49.0">
+         <content>
+            <VBox fx:id="vboxForTasks" prefHeight="386.0" prefWidth="618.0" stylesheets="@groupScreen-css.css" />
+         </content>
+      </ScrollPane>
       <ScrollPane layoutY="47.0">
          <content>
-            <VBox fx:id="groupsVbox" prefHeight="350.0" prefWidth="124.0" />
+            <VBox fx:id="groupsVbox" prefHeight="426.0" prefWidth="147.0" scaleZ="2.0" />
          </content>
       </ScrollPane>
-      <Label alignment="CENTER" layoutX="-1.0" layoutY="-1.0" prefHeight="49.0" prefWidth="600.0" text="Label" />
-      <ScrollPane fx:id="scrollPaneTasks" layoutX="126.0" layoutY="47.0">
-         <content>
-            <VBox fx:id="vboxForTasks" prefHeight="323.0" prefWidth="474.0"/>
-         </content>
-      </ScrollPane>
-      <Button layoutX="492.0" layoutY="371.0" mnemonicParsing="false" onMouseClicked="#makingTaskAdding" text="New Task" />
+      <Label alignment="CENTER" layoutX="-1.0" layoutY="-1.0" prefHeight="50.0" prefWidth="766.0" text="Groups" />
+      <Button layoutX="401.0" layoutY="440.0" mnemonicParsing="false" onMouseClicked="#makingTaskAdding" text="New Task" />
+      <Button fx:id="addingUsers" layoutX="281.0" layoutY="440.0" mnemonicParsing="false" onAction="#addingUser" text="New User" />
+      <Button layoutX="167.0" layoutY="440.0" mnemonicParsing="false" onAction="#addingGroup" text="New Group" />
+      <Button layoutX="685.0" layoutY="440.0" mnemonicParsing="false" onAction="#submittingTasks" text="Submit" />
    </children>
 </AnchorPane>
