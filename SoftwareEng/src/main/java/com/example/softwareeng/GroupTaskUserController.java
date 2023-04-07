@@ -1,21 +1,21 @@
 package com.example.softwareeng;
 
-import javafx.concurrent.Task;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.controlsfx.control.action.Action;
-
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -30,7 +30,8 @@ public class GroupTaskUserController implements Initializable {
     @FXML
     VBox groupsVbox;
     GroupTaskUserDB groupConn;
-    public CheckBox choiceOfDays;
+
+    ArrayList<TaskAndDays> taskAndDaysArrayList = new ArrayList<>();
     void SettingGroupID() {
         int groupIDforTasks = 1;
         CreateTaskController.groupSelectedID = groupIDforTasks;
@@ -76,24 +77,38 @@ public class GroupTaskUserController implements Initializable {
         }
     }
     void AddingCheckboxesForDays(HBox hBox) {
+        ArrayList<CheckBox> choiceOfDaysList = new ArrayList<CheckBox>();
+        for (DayOfWeek day : DayOfWeek.values()) {
+            ObservableList<Node> node = hBox.getChildren();
+            Label l = (Label)node.get(0);
+            String stringOfDay = day.toString();
+            CheckBox choiceOfDays = new CheckBox(day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
+            choiceOfDaysList.add(choiceOfDays);
+            hBox.getChildren().add(choiceOfDays);
+            TaskAndDays taskAndDays = new TaskAndDays(l.getText(),stringOfDay,day.getValue(),false);
         EventHandler<ActionEvent> eventHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (choiceOfDays.isSelected()){
-                    System.out.println("Unselected");
-                }
-                else{
-                    System.out.println("Selected");
+                if (choiceOfDays.isSelected()) {
+                    taskAndDays.setSelectedOrNot(true);
+                    System.out.println(taskAndDays.isSelectedOrNot());
+                    taskAndDaysArrayList.add(taskAndDays);
+                } else {
+                    taskAndDays.setSelectedOrNot(false);
+                    taskAndDaysArrayList.remove(taskAndDays);
+                    System.out.println(taskAndDays.isSelectedOrNot());
+                    System.out.println(taskAndDaysArrayList.size());
                 }
             }
         };
-        for (DayOfWeek day : DayOfWeek.values()){
-            choiceOfDays = new CheckBox(day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
             choiceOfDays.setOnAction(eventHandler);
-            hBox.getChildren().add(choiceOfDays);
         }
     }
-
+    @FXML
+    void submittingTasks(){
+        //Connect this to mission 7.
+        taskAndDaysArrayList.get(0);
+    }
     @FXML
     void makingTaskAdding() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskScreen.class.getResource("createTask-view.fxml"));
