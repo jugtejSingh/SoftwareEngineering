@@ -4,13 +4,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 public class CreateTaskController implements Initializable {
     @FXML
@@ -21,7 +21,7 @@ public class CreateTaskController implements Initializable {
     TextField timeEstimate;
     static int groupSelectedID = 0;
     CreateTaskDB db = new CreateTaskDB();
-    ArrayList<Integer> listForEstimates = new ArrayList<Integer>();
+
     HashMap<String,Integer> mapForChoiceBox;
     int lastNumberForHashMap = 0;
 //Initializer for data in the choice boxes
@@ -37,13 +37,14 @@ public class CreateTaskController implements Initializable {
     @FXML
     //Event handler for the button
     void addingTasksAndEstimates() {
-        mapForChoiceBox.put(choiceBox.getItems().get((Integer)lastNumberForHashMap), Integer.parseInt(timeEstimate.getText()));
-        String tasksName = taskName.getText();
-        int taskID = db.InsertIntoTask(groupSelectedID, tasksName);
-        for (String names: mapForChoiceBox.keySet()){
-            int userID = db.gettingUserIds(names);
-            db.InsertIntoTaskAndUsers(userID,groupSelectedID, mapForChoiceBox.get(names), taskID);
-        }
+        mapForChoiceBox.put(choiceBox.getItems().get((Integer) lastNumberForHashMap), Integer.parseInt(timeEstimate.getText()));
+
+            String tasksName = taskName.getText();
+            int taskID = db.InsertIntoTask(groupSelectedID, tasksName);
+            for (String names : mapForChoiceBox.keySet()) {
+                int userID = db.gettingUserIds(names);
+                db.InsertIntoTaskAndUsers(userID, groupSelectedID, mapForChoiceBox.get(names), taskID);
+            }
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -58,10 +59,14 @@ public class CreateTaskController implements Initializable {
         choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                    mapForChoiceBox.put(choiceBox.getItems().get((Integer)number), Integer.parseInt(timeEstimate.getText()));
+                try{ int estimatedTime = Integer.parseInt(timeEstimate.getText());
+                    mapForChoiceBox.put(choiceBox.getItems().get((Integer)number), estimatedTime);
                 timeEstimate.setText(String.valueOf(mapForChoiceBox.get(choiceBox.getItems().get((Integer)t1))));
                 lastNumberForHashMap = (int) t1;
-                }
+                }catch(Exception e){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION,"The value added is not an integer", ButtonType.CLOSE);
+                    alert.showAndWait();
+                }}
             }
         );
         for (String x: arraylistOfNames) {

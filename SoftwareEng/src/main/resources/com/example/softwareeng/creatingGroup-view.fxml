@@ -11,11 +11,11 @@
 <children>
     <Pane prefHeight="310.0" prefWidth="425.0">
         <children>
-            <Button layoutX="163.0" layoutY="256.0" mnemonicParsing="false" text="Remove Group" />
+            <Button layoutX="163.0" layoutY="256.0" mnemonicParsing="false" onAction="#removingUsersFromDatabase" text="Remove Group" />
             <ChoiceBox fx:id="choiceBox" layoutX="216.0" layoutY="200.0" prefWidth="150.0" />
-            <Button layoutX="175.0" layoutY="155.0" mnemonicParsing="false" text="Add Group" />
+            <Button layoutX="175.0" layoutY="155.0" mnemonicParsing="false" onAction="#AddingGroups" text="Add Group" />
             <Label alignment="CENTER" layoutX="-1.0" layoutY="-1.0" prefHeight="45.0" prefWidth="423.0" text="Add or Remove a user" />
-            <TextField layoutX="225.0" layoutY="106.0" promptText="Delete User" />
+            <TextField fx:id="textFieldForGroup" layoutX="225.0" layoutY="106.0" promptText="Delete User" />
         </children>
     </Pane>
 </children>
