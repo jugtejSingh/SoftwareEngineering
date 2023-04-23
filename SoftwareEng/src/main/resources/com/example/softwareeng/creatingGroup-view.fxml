@@ -15,7 +15,7 @@
             <ChoiceBox fx:id="choiceBox" layoutX="216.0" layoutY="200.0" prefWidth="150.0" />
             <Button layoutX="175.0" layoutY="155.0" mnemonicParsing="false" onAction="#AddingGroups" text="Add Group" />
             <Label alignment="CENTER" layoutX="-1.0" layoutY="-1.0" prefHeight="45.0" prefWidth="423.0" text="Add or Remove a user" />
-            <TextField fx:id="textFieldForGroup" layoutX="225.0" layoutY="106.0" promptText="Delete User" />
+            <TextField fx:id="textFieldForGroup" layoutX="225.0" layoutY="106.0" promptText="Add Group" />
         </children>
     </Pane>
 </children>

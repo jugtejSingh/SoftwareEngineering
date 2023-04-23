@@ -5,15 +5,18 @@ import java.util.ArrayList;
 public class Users {
     int userID;
     String userName;
-    int estimateTime;
-    int backlog;
-    int divisionOfWork;
+    float backlog;
+    float divisionOfWork;
 
-    public int getDivisionOfWork() {
+    public void setBacklog(float backlog) {
+        this.backlog = backlog;
+    }
+
+    public float getDivisionOfWork() {
         return divisionOfWork;
     }
 
-    public void setDivisionOfWork(int divisionOfWork) {
+    public void setDivisionOfWork(float divisionOfWork) {
         this.divisionOfWork = divisionOfWork;
     }
 
@@ -27,20 +30,8 @@ public class Users {
         this.taskList = taskList;
     }
 
-    public int getBacklog() {
+    public float getBacklog() {
         return backlog;
-    }
-
-    public void setBacklog(int backlog) {
-        this.backlog = backlog;
-    }
-
-    public int getEstimateTime() {
-        return estimateTime;
-    }
-
-    public void setEstimateTime(int estimateTime) {
-        this.estimateTime = estimateTime;
     }
 
     public int getUserID() {

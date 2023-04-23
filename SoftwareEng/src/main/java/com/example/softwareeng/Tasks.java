@@ -1,13 +1,32 @@
 package com.example.softwareeng;
 
+import java.time.LocalDateTime;
+
 public class Tasks {
     private int taskID;
     private int groupID;
     private String taskName;
-    int WeeklyorDaily;
+    int WeeklyDaily;
+    float estimatedTime;
+    int totalTime;
+    String userName;
+    LocalDateTime timeTillCompletition;
 
-    int estimatedTime;
-int totalTime;
+    public LocalDateTime getTimeTillCompletition() {
+        return timeTillCompletition;
+    }
+
+    public void setTimeTillCompletition(LocalDateTime timeTillCompletition) {
+        this.timeTillCompletition = timeTillCompletition;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public int getTotalTime() {
         return totalTime;
@@ -17,20 +36,20 @@ int totalTime;
         this.totalTime = totalTime;
     }
 
-    public int getEstimatedTime() {
+    public float getEstimatedTime() {
         return estimatedTime;
     }
 
-    public void setEstimatedTime(int estimatedTime) {
+    public void setEstimatedTime(float estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 
-    public int getWeeklyorDaily() {
-        return WeeklyorDaily;
+    public int getWeeklyDaily() {
+        return WeeklyDaily;
     }
 
-    public void setWeeklyorDaily(int weeklyorDaily) {
-        WeeklyorDaily = weeklyorDaily;
+    public void setWeeklyDaily(int weeklyDaily) {
+        WeeklyDaily = weeklyDaily;
     }
 
     public int getTaskID() {

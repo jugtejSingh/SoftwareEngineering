@@ -43,9 +43,9 @@ public class CreatingGroupViewController implements Initializable {
     void AddingGroups() {
         if (Pattern.matches("[a-zA-Z]+",textFieldForGroup.getText())) {
             db.InsertingGroups(textFieldForGroup.getText());
-            AddingGroupsToChoiceBox();
             Alert alert = new Alert(Alert.AlertType.INFORMATION,"The group has been added", ButtonType.CLOSE);
             alert.showAndWait();
+            AddingGroupsToChoiceBox();
         }else{
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "The value you added is not alphabetical.", ButtonType.CLOSE);
             alert.showAndWait();

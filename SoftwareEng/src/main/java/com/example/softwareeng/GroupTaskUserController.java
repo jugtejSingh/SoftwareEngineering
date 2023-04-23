@@ -3,7 +3,6 @@ package com.example.softwareeng;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,10 +15,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
-import java.time.DayOfWeek;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class GroupTaskUserController implements Initializable {
@@ -104,9 +100,8 @@ public class GroupTaskUserController implements Initializable {
                     task.setTaskID(taskID);
                     task.setTaskName(l.getText());
                     task.setGroupID(groupIDForMission7);
-                    task.setWeeklyorDaily(0);
+                    task.setWeeklyDaily(0);
                     taskAndDaysArrayList.add(task);
-                    System.out.println("Weekly");
                 } else if(toggleGroup.getSelectedToggle() == Daily) {
                     for (int i = taskAndDaysArrayList.size()-1; i >= 0; i--)
                     {
@@ -120,18 +115,15 @@ public class GroupTaskUserController implements Initializable {
                         task.setTaskID(taskID);
                         task.setTaskName(l.getText());
                         task.setGroupID(groupIDForMission7);
-                        task.setWeeklyorDaily(i);
+                        task.setWeeklyDaily(i);
                         taskAndDaysArrayList.add(task);
-                        System.out.println("Daily");
                     }
                 }
                 else if(toggleGroup.getSelectedToggle() == Ignore){
                     for (int i = taskAndDaysArrayList.size()-1; i >= 0; i--) {
                         Tasks task = taskAndDaysArrayList.get(i);
-                        System.out.println(taskAndDaysArrayList.size());
                         if(task.getTaskName().equals(l.getText())){
                             taskAndDaysArrayList.remove(task);
-                            System.out.println("Ignored");
                         }
                     }
                 }}});
@@ -160,7 +152,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
                 taskForUser.setGroupID(task.getGroupID());
                 taskForUser.setTaskID(task.getTaskID());
                 taskForUser.setTaskName(task.getTaskName());
-                task.setWeeklyorDaily(task.getWeeklyorDaily());
+                taskForUser.setWeeklyDaily(task.getWeeklyDaily());
                 int estimatedTime = jobDB.gettingEstimatedTime(user.getUserID(),task.getTaskID());
                 taskForUser.setEstimatedTime(estimatedTime);
                 tasksArrayList.add(taskForUser);
@@ -172,7 +164,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
     }
     @FXML
     void makingTaskAdding() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskScreen.class.getResource("createTask-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("createTask-view.fxml"));
         String css = this.getClass().getResource("createTask.css").toExternalForm();
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(css);
@@ -184,7 +176,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
 
     @FXML
     void addingUser() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskScreen.class.getResource("creatingUser-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("creatingUser-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Hello!");
@@ -195,7 +187,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
 
     @FXML
     void addingGroup() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskScreen.class.getResource("creatingGroup-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("creatingGroup-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Hello!");
