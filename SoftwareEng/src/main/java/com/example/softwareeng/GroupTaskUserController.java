@@ -159,7 +159,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
             }
             user.setTaskList(tasksArrayList);
         }
-    JobSorting jobSorting = new JobSorting();
+    JobSorting jobSorting = new JobSorting(jobDB);
         jobSorting.sortTimes(userList);
     }
     @FXML

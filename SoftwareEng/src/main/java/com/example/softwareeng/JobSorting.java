@@ -1,17 +1,23 @@
 package com.example.softwareeng;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class JobSorting {
+    JobSortingDB jobDB;
+
+    public JobSorting(JobSortingDB jobDB) {
+        this.jobDB = jobDB;
+    }
+
     void sortTimes(ArrayList<Users> usersArrayList) {
         for (Users user : usersArrayList) {
             float total = 0;
             for (Tasks task : user.getTaskList()) {
                 total = total + task.getEstimatedTime();
-                task.setTotalTime((int) total);
             }
             for (Tasks task : user.getTaskList()) {
                 if (total == 0) {
@@ -20,7 +26,8 @@ public class JobSorting {
                     task.setEstimatedTime((task.getEstimatedTime() / total));
                 }
             }
-            user.setDivisionOfWork(user.getBacklog());
+            //Add in getting backlog from the database table
+            user.setDivisionOfWork(jobDB.getBacklog(user.getUserID()));
         }
         compareUsers(usersArrayList);
     }
@@ -49,27 +56,27 @@ public class JobSorting {
             highestTask.setUserName(lowestTime.userName);
             Tasks tempTask =  timeAddition(highestTask);
             finalAllocatedTasks.add(tempTask);
+            jobDB.addingToTempTable(tempTask);
             for (int h = 0; h < usersArrayList.size(); h++) {
                 usersArrayList.get(h).getTaskList().remove(highestTaskint);
             }
             sizeof--;
         }
-        float totalForUpdatingBacklog = 0;
-        for (Users user: usersArrayList) {
-            totalForUpdatingBacklog = totalForUpdatingBacklog + user.getDivisionOfWork();
-        }
-        totalForUpdatingBacklog = totalForUpdatingBacklog*100;
-        for (Users user: usersArrayList){
-            System.out.println("//////////////////////////////////////////////////////////");
-            System.out.println(user.getDivisionOfWork());
-            System.out.println(usersArrayList.size()/totalForUpdatingBacklog);
-            if(user.getDivisionOfWork() >= usersArrayList.size()/totalForUpdatingBacklog){
-                System.out.println("Is this running");
-                user.setBacklog((usersArrayList.size()/totalForUpdatingBacklog) - user.getDivisionOfWork());
-            }
-        }
         for (Tasks task: finalAllocatedTasks) {
-            System.out.println(task.getUserName() + "    " + task.getTaskName() + "    " + task.getEstimatedTime() + "     " + usersArrayList.get(0).getBacklog());
+            System.out.println(task.getUserName() + "    " + task.getTaskName() + "    " + task.getEstimatedTime());
+        }
+        float totalDivision =0;
+        for (Users user: usersArrayList) {
+            totalDivision = totalDivision + user.getDivisionOfWork();
+        }
+        for (Users user:usersArrayList) {
+
+            Float average = totalDivision/(float)usersArrayList.size();
+            System.out.println(average);
+            if (user.getDivisionOfWork() > average){
+                float backlog = user.getDivisionOfWork() - average;
+                jobDB.insertBacklog(user.userID,backlog);
+            }
         }
     }
     Tasks timeAddition(Tasks task){
