@@ -36,7 +36,7 @@ public class DBConnection {
             System.out.println("Failed to connect to "+filename);        	
             System.out.println(e.getMessage());
             return false;
-        } 
+        }
         return true;    
 	}
 
@@ -62,6 +62,7 @@ public class DBConnection {
 	             System.out.println(e.getMessage());
 	             return false;
 		  }
+
 		  return true;
 		}
 
@@ -90,7 +91,5 @@ public class DBConnection {
 	        }
 		  return result;
 		}
-
-
 
 }

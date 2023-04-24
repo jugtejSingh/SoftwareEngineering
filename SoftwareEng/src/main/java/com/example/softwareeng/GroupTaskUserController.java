@@ -1,7 +1,8 @@
 package com.example.softwareeng;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,16 +11,11 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLOutput;
-import java.time.DayOfWeek;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class GroupTaskUserController implements Initializable {
@@ -30,13 +26,14 @@ public class GroupTaskUserController implements Initializable {
     @FXML
     VBox groupsVbox;
     GroupTaskUserDB groupConn;
-
-    ArrayList<TaskAndDays> taskAndDaysArrayList = new ArrayList<>();
+    ArrayList<Tasks> taskAndDaysArrayList = new ArrayList<>();
+    int groupIDForMission7 = 0;
     void SettingGroupID() {
         int groupIDforTasks = 1;
         CreateTaskController.groupSelectedID = groupIDforTasks;
         CreateTaskDB.groupID = groupIDforTasks;
         CreatingUserViewController.groupIDforUserIDInsert = groupIDforTasks;
+        groupIDForMission7 = groupIDforTasks;
         DisplayingTasks(groupIDforTasks);
     }
     void DisplayingGroups() {
@@ -56,6 +53,7 @@ public class GroupTaskUserController implements Initializable {
                     CreateTaskController.groupSelectedID = idOfGroup;
                     CreateTaskDB.groupID = idOfGroup;
                     CreatingUserViewController.groupIDforUserIDInsert = idOfGroup;
+                    groupIDForMission7 = idOfGroup;
                     DisplayingTasks(groupName.getId());
                 }
             });
@@ -77,41 +75,96 @@ public class GroupTaskUserController implements Initializable {
         }
     }
     void AddingCheckboxesForDays(HBox hBox) {
-        ArrayList<CheckBox> choiceOfDaysList = new ArrayList<CheckBox>();
-        for (DayOfWeek day : DayOfWeek.values()) {
-            ObservableList<Node> node = hBox.getChildren();
-            Label l = (Label)node.get(0);
-            String stringOfDay = day.toString();
-            CheckBox choiceOfDays = new CheckBox(day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
-            choiceOfDaysList.add(choiceOfDays);
-            hBox.getChildren().add(choiceOfDays);
-            TaskAndDays taskAndDays = new TaskAndDays(l.getText(),stringOfDay,day.getValue(),false);
-        EventHandler<ActionEvent> eventHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if (choiceOfDays.isSelected()) {
-                    taskAndDays.setSelectedOrNot(true);
-                    System.out.println(taskAndDays.isSelectedOrNot());
-                    taskAndDaysArrayList.add(taskAndDays);
-                } else {
-                    taskAndDays.setSelectedOrNot(false);
-                    taskAndDaysArrayList.remove(taskAndDays);
-                    System.out.println(taskAndDays.isSelectedOrNot());
-                    System.out.println(taskAndDaysArrayList.size());
+        ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton Weekly = new RadioButton("Weekly");
+        RadioButton Daily = new RadioButton("Daily");
+        RadioButton Ignore = new RadioButton("Ignore");
+        Weekly.setToggleGroup(toggleGroup);
+        Daily.setToggleGroup(toggleGroup);
+        Ignore.setToggleGroup(toggleGroup);
+        Ignore.setSelected(true);
+        ObservableList<Node> node = hBox.getChildren();
+        Label l = (Label)node.get(0);
+        int taskID = groupConn.gettingTaskID(l.getText());
+        toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+            public void changed(ObservableValue<? extends Toggle> ov,
+                                Toggle old_toggle, Toggle new_toggle) {
+                if (toggleGroup.getSelectedToggle() == Weekly) {
+                    for (int i = taskAndDaysArrayList.size()-1; i >= 0; i--) {
+                        Tasks task = taskAndDaysArrayList.get(i);
+                        if(task.getTaskName().equals(l.getText())){
+                            taskAndDaysArrayList.remove(task);
+                        }
+                    }
+                    Tasks task = new Tasks();
+                    task.setTaskID(taskID);
+                    task.setTaskName(l.getText());
+                    task.setGroupID(groupIDForMission7);
+                    task.setWeeklyDaily(0);
+                    taskAndDaysArrayList.add(task);
+                } else if(toggleGroup.getSelectedToggle() == Daily) {
+                    for (int i = taskAndDaysArrayList.size()-1; i >= 0; i--)
+                    {
+                        Tasks task = taskAndDaysArrayList.get(i);
+                        if(task.getTaskName().equals(l.getText())){
+                            taskAndDaysArrayList.remove(task);
+                        }
+                    }
+                    for (int i = 1; i < 8; i++) {
+                        Tasks task = new Tasks();
+                        task.setTaskID(taskID);
+                        task.setTaskName(l.getText());
+                        task.setGroupID(groupIDForMission7);
+                        task.setWeeklyDaily(i);
+                        taskAndDaysArrayList.add(task);
+                    }
                 }
-            }
-        };
-            choiceOfDays.setOnAction(eventHandler);
+                else if(toggleGroup.getSelectedToggle() == Ignore){
+                    for (int i = taskAndDaysArrayList.size()-1; i >= 0; i--) {
+                        Tasks task = taskAndDaysArrayList.get(i);
+                        if(task.getTaskName().equals(l.getText())){
+                            taskAndDaysArrayList.remove(task);
+                        }
+                    }
+                }}});
+        hBox.getChildren().add(Weekly);
+        hBox.getChildren().add(Daily);
+        hBox.getChildren().add(Ignore);
+    }
+ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
+        ArrayList<Tasks> tasksArrayList = new ArrayList<>();
+    for (Tasks task: taskAndDaysArrayList){
+        if(task.getGroupID() == groupIDForMission7){
+            tasksArrayList.add(task);
         }
     }
+    return tasksArrayList;
+}
     @FXML
     void submittingTasks(){
-        //Connect this to mission 7.
-        taskAndDaysArrayList.get(0);
+        ArrayList<Tasks> taskList = gettingTheTaskArrayList(groupIDForMission7);
+        JobSortingDB jobDB = new JobSortingDB();
+        ArrayList<Users> userList = jobDB.getUsers(groupIDForMission7);
+        for (Users user:userList) {
+            ArrayList<Tasks> tasksArrayList = new ArrayList<>();
+            for (Tasks task: taskList) {
+                Tasks taskForUser = new Tasks();
+                taskForUser.setGroupID(task.getGroupID());
+                taskForUser.setTaskID(task.getTaskID());
+                taskForUser.setTaskName(task.getTaskName());
+                taskForUser.setWeeklyDaily(task.getWeeklyDaily());
+                int estimatedTime = jobDB.gettingEstimatedTime(user.getUserID(),task.getTaskID());
+                taskForUser.setEstimatedTime(estimatedTime);
+                tasksArrayList.add(taskForUser);
+            }
+            user.setTaskList(tasksArrayList);
+        }
+    JobSorting jobSorting = new JobSorting(jobDB);
+        jobSorting.sortTimes(userList);
     }
     @FXML
     void makingTaskAdding() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskScreen.class.getResource("createTask-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("createTask-view.fxml"));
         String css = this.getClass().getResource("createTask.css").toExternalForm();
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(css);
@@ -123,7 +176,7 @@ public class GroupTaskUserController implements Initializable {
 
     @FXML
     void addingUser() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskScreen.class.getResource("creatingUser-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("creatingUser-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Hello!");
@@ -134,7 +187,7 @@ public class GroupTaskUserController implements Initializable {
 
     @FXML
     void addingGroup() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskScreen.class.getResource("creatingGroup-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("creatingGroup-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Hello!");
@@ -150,3 +203,6 @@ public class GroupTaskUserController implements Initializable {
         groupsVbox.setFillWidth(true);
     }
 }
+
+//You have an arraylist that you make with every group, once you press submit the arraylist gets pushed
+//to the job sorting algorthm which sorts the jobs and sends it through to the users

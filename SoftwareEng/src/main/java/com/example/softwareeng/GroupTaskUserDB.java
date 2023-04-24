@@ -11,6 +11,27 @@ public class GroupTaskUserDB {
 		database.Connect("TaskManagerDB.sqlite");
 	}
 
+	void InsertingGroups(String userName) {
+		int groupID = GetMaxGroupID() + 1;
+		String insertingIntoUsers = new String("INSERT INTO groups(groupID,groupName)VALUES('" + groupID + "','" + userName + "')");
+		boolean value = database.RunSQL(insertingIntoUsers);
+		if(!value){
+			System.out.println("There was an issue inserting users in InsertingUsers");
+		}
+	}
+	public int GetMaxGroupID() {
+		String sqlString = new String("SELECT MAX(groupID) from groups");
+		ResultSet groups = database.RunSQLQuery(sqlString);
+		int groupMax = 0;
+		try {
+			while (groups.next()) {
+				groupMax = groups.getInt(1);
+			}
+		} catch (Exception e) {
+			System.out.println("An error occurred while putting value of column into countOfColumn " + e.getMessage());
+		}
+		return groupMax;
+	}
 	/*
 	 * Adds a new student to the DBConnection database
 	 * Sends error string to System.out if the DBConnection reports a failure
@@ -50,5 +71,40 @@ public class GroupTaskUserDB {
 			System.out.println("An error occurred while putting value of column into countOfColumn");
 		}
 		return answer;
+	}
+	public void DeleteGroup(String groupName) {
+		// Should probably add a message if the student does not exist.
+		String sqlStringforID = new String("Select groupID FROM groups WHERE groupName = '" + groupName + "';");
+		ResultSet groups = database.RunSQLQuery(sqlStringforID);
+		int groupID = 0;
+		try {
+			groupID = Integer.parseInt(groups.getString(1));
+		} catch (Exception e) {
+			System.out.println("Error occured in deleteUser");
+		}
+		String sqlString = new String("DELETE FROM groups WHERE groupName = '" + groupName + "';");
+		boolean success = database.RunSQL(sqlString);
+		String removingFromTaskandUsers = new String("DELETE FROM taskAndUsers where groupID ='" + groupID + "' ");
+		if (!success) {
+			System.out.println("Failed to run query: " + sqlString);
+		}
+		String removingFromTasks = new String("DELETE FROM tasks where groupID ='" + groupID + "'");
+		if (!success) {
+			System.out.println("Failed to run query: " + sqlString);
+		}
+	}
+	public int gettingTaskID(String taskName){
+		String sqlString = new String("SELECT taskID from tasks where taskName = '" +taskName+ "' ;");
+		ResultSet tasks = database.RunSQLQuery(sqlString);
+		int taskID = 0;
+		try {
+			while (tasks.next()) {
+				taskID = tasks.getInt(1);
+			}
+		} catch (Exception e) {
+			System.out.println("An error occurred while putting value of column into countOfColumn");
+		}
+		return taskID;
+
 	}
 }

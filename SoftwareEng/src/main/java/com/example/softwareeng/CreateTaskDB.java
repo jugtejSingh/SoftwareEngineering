@@ -63,19 +63,6 @@ public class CreateTaskDB {
         database.RunSQL(insertingIntoTasksAndUsers);
     }
 
-    public int GetMaxUserCount() {
-        String sqlString = new String("SELECT COUNT(userID) from users where groupID = '" + groupID + "'");
-        ResultSet users = database.RunSQLQuery(sqlString);
-        int usersMax = 0;
-        try {
-            while (users.next()) {
-                usersMax = users.getInt(1);
-            }
-        } catch (Exception e) {
-            System.out.println("An error occurred while putting value of column into countOfColumn " + e.getMessage());
-        }
-        return usersMax;
-    }
     public int GetMaxUserID() {
         String sqlString = new String("SELECT MAX(userID) from users");
         ResultSet users = database.RunSQLQuery(sqlString);
