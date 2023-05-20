@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class TaskListController extends Application implements Initializable {

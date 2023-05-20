@@ -11,6 +11,7 @@
       <AnchorPane layoutX="1.0" layoutY="4.0" prefHeight="42.0" prefWidth="764.0">
          <children>
             <Label alignment="CENTER" prefHeight="50.0" prefWidth="766.0" text="Groups" />
+            <Button layoutX="691.0" layoutY="16.0" mnemonicParsing="false" onAction="#openingTaskList" text="Task List" />
          </children></AnchorPane>
       <ScrollPane layoutX="7.0" layoutY="63.0" prefHeight="370.0" prefWidth="147.0">
          <content>

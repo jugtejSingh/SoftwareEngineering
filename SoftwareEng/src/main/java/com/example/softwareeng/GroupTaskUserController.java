@@ -278,6 +278,36 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
 
 
     }
+    @FXML
+    void openingTaskList() throws IOException {
+        Stage stage = (Stage)scrollPaneTasks.getScene().getWindow();
+        stage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("taskListScreen-view.fxml"));
+        String cssGroup = this.getClass().getResource("taskListScreen-css.css").toExternalForm();
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stageForTasksList = new Stage();
+        stageForTasksList.setTitle("Hello!");
+        stageForTasksList.setScene(scene);
+        stageForTasksList.show();
+        stageForTasksList.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("groupScreen-view.fxml"));
+                String cssGroup = this.getClass().getResource("groupScreen-css.css").toExternalForm();
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                scene.getStylesheets().add(cssGroup);
+                stage.setTitle("Hello!");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SettingGroupID();

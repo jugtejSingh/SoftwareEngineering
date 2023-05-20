@@ -54,7 +54,7 @@ public class CompletedTaskListController extends Application implements Initiali
 
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("completedTaskListScreen-view.fxml"));
-        String cssGroup = this.getClass().getResource("completedTaskListScreen-css.css").toExternalForm();
+        String cssGroup = this.getClass().getResource("com/example/softwareeng/completedTaskListScreen-css.css").toExternalForm();
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(cssGroup);
         stage.setTitle("CompletedTaskList");
