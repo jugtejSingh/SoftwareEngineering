@@ -107,4 +107,22 @@ public class GroupTaskUserDB {
 		return taskID;
 
 	}
+	public void deletingTasks(String taskName){
+			int taskID = gettingTaskID(taskName);
+			String deletingFromTasks = new String("Delete from tasks where taskName= '"+taskName+"'");
+			String deletingFromTaskAndUsers = new String("Delete from taskAndUsers where taskID= '"+taskID+"'");
+			String deletingFromTempTasks = new String("Delete from tempTasks where taskID= '"+taskID+"'");
+			boolean value = database.RunSQL(deletingFromTasks);
+			boolean value1 = database.RunSQL(deletingFromTaskAndUsers);
+			boolean value2 = database.RunSQL(deletingFromTempTasks);
+			if(!value){
+				System.out.println("There was an issue inserting users in InsertingUsers");
+			}
+		if(!value1){
+			System.out.println("There was an issue inserting users in InsertingUsers");
+		}
+		if(!value2){
+			System.out.println("There was an issue inserting users in InsertingUsers");
+		}
+		}
 }
