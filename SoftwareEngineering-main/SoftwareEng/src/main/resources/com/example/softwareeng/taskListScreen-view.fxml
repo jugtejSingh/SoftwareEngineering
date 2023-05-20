@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.TaskListController">
+   <children>
+      <TableView fx:id="taskListTable" layoutX="65.0" layoutY="86.0" prefHeight="217.0" prefWidth="471.0" />
+      <Label fx:id="weeklyTitle" layoutX="258.0" layoutY="32.0" text="Weekly To Do Lists" />
+      <Button fx:id="taskComplete" layoutX="261.0" layoutY="330.0" mnemonicParsing="false" onAction="#taskComplete" text="Task Complete" />
+      <Button fx:id="exit" layoutX="180.0" layoutY="330.0" mnemonicParsing="false" onAction="#exit" text="Exit" />
+      <Button fx:id="previousWeek" layoutX="34.0" layoutY="86.0" mnemonicParsing="false" onAction="#previousWeek" text="&lt;" />
+      <Button fx:id="upcomingWeek" layoutX="542.0" layoutY="86.0" mnemonicParsing="false" onAction="#upcomingWeek" text="&gt;" />
+      <Button fx:id="viewCompletedTasks" layoutX="434.0" layoutY="28.0" mnemonicParsing="false" onAction="#viewCompletedTasks" text="View Completed Tasks" />
+      <Label fx:id="date" layoutX="288.0" layoutY="61.0" text="Date" />
+      <Label fx:id="weekStarting" layoutX="169.0" layoutY="61.0" text="Week Starting:" />
+   </children>
+</AnchorPane>
