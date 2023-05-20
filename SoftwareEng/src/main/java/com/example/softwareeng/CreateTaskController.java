@@ -19,7 +19,7 @@ public class CreateTaskController implements Initializable {
     ChoiceBox<String> choiceBox;
     @FXML
     TextField timeEstimate;
-    static int groupSelectedID = 0;
+    static int groupSelectedID = 1;
     CreateTaskDB db = new CreateTaskDB();
 
     HashMap<String,Integer> mapForChoiceBox;

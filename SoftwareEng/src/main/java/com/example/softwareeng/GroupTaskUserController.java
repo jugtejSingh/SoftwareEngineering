@@ -1,8 +1,10 @@
 package com.example.softwareeng;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public class GroupTaskUserController implements Initializable {
     GroupTaskUserDB groupConn;
     ArrayList<Tasks> taskAndDaysArrayList = new ArrayList<>();
     int groupIDForMission7 = 0;
+
     void SettingGroupID() {
         int groupIDforTasks = 1;
         CreateTaskController.groupSelectedID = groupIDforTasks;
@@ -72,9 +77,12 @@ public class GroupTaskUserController implements Initializable {
             Label label = new Label(task.getTaskName());
             hboxesForCheckboxes.getChildren().add(label);
             AddingCheckboxesForDays(hboxesForCheckboxes);
+            addingDelete(hboxesForCheckboxes);
         }
     }
     void AddingCheckboxesForDays(HBox hBox) {
+        Region region = new Region();
+        region.maxWidth(100);
         ToggleGroup toggleGroup = new ToggleGroup();
         RadioButton Weekly = new RadioButton("Weekly");
         RadioButton Daily = new RadioButton("Daily");
@@ -127,9 +135,26 @@ public class GroupTaskUserController implements Initializable {
                         }
                     }
                 }}});
+        hBox.getChildren().add(region);
         hBox.getChildren().add(Weekly);
         hBox.getChildren().add(Daily);
         hBox.getChildren().add(Ignore);
+    }
+    void addingDelete(HBox hbox){
+        ObservableList<Node> node = hbox.getChildren();
+        Label label = (Label)node.get(0);
+        System.out.println(label.getText());
+        Button button = new Button();
+        button.setText("Delete");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                groupConn.deletingTasks(label.getText());
+                DisplayingTasks(groupIDForMission7);
+            }
+        });
+        hbox.getChildren().add(button);
+
     }
 ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
         ArrayList<Tasks> tasksArrayList = new ArrayList<>();
@@ -164,43 +189,100 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
     }
     @FXML
     void makingTaskAdding() throws IOException {
+        Stage stage = (Stage)scrollPaneTasks.getScene().getWindow();
+        stage.close();
         FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("createTask-view.fxml"));
         String css = this.getClass().getResource("createTask.css").toExternalForm();
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(css);
-        Stage stage = new Stage();
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
+        Stage stageForTask = new Stage();
+        stageForTask.setTitle("Hello!");
+        stageForTask.setScene(scene);
+        stageForTask.show();
+        stageForTask.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("groupScreen-view.fxml"));
+                String cssGroup = this.getClass().getResource("groupScreen-css.css").toExternalForm();
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                scene.getStylesheets().add(cssGroup);
+                stage.setTitle("Hello!");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
     }
 
     @FXML
     void addingUser() throws IOException {
+        Stage stage = (Stage)scrollPaneTasks.getScene().getWindow();
+        stage.close();
         FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("creatingUser-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
+        Stage stageForUser = new Stage();
+        stageForUser.setTitle("Hello!");
+        stageForUser.setScene(scene);
+        stageForUser.show();
+        stageForUser.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("groupScreen-view.fxml"));
+                String cssGroup = this.getClass().getResource("groupScreen-css.css").toExternalForm();
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                scene.getStylesheets().add(cssGroup);
+                stage.setTitle("Hello!");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
 
     }
 
     @FXML
     void addingGroup() throws IOException {
+        Stage stage = (Stage)scrollPaneTasks.getScene().getWindow();
+        stage.close();
         FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("creatingGroup-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
+        Stage stageForGroups = new Stage();
+        stageForGroups.setTitle("Hello!");
+        stageForGroups.setScene(scene);
+        stageForGroups.show();
+        stageForGroups.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("groupScreen-view.fxml"));
+                String cssGroup = this.getClass().getResource("groupScreen-css.css").toExternalForm();
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                scene.getStylesheets().add(cssGroup);
+                stage.setTitle("Home Screen");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
 
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SettingGroupID();
         DisplayingGroups();
-        scrollPaneTasks.setFitToWidth(true);
-        groupsVbox.setFillWidth(true);
+        DisplayingTasks(groupIDForMission7);
     }
 }
 
