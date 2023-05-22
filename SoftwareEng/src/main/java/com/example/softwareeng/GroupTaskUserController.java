@@ -48,9 +48,7 @@ public class GroupTaskUserController implements Initializable {
         for (int p = 0; p < groupArrayList.size(); p++) {
             Group groupName = (groupArrayList.get(p));
             label1 = new Label(groupName.getName());
-            groupsVbox.getChildren().add(label1);
-            Separator sep = new Separator();
-            groupsVbox.getChildren().add(sep);
+
             label1.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
@@ -63,6 +61,9 @@ public class GroupTaskUserController implements Initializable {
                     DisplayingTasks(groupName.getId());
                 }
             });
+            groupsVbox.getChildren().add(label1);
+            Separator sep = new Separator();
+            groupsVbox.getChildren().add(sep);
         }
     }
     void DisplayingTasks(int groupIdForTasks) {

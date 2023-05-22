@@ -7,7 +7,6 @@ public class GroupTaskUserDB {
 	DBConnection database;
 
 	public GroupTaskUserDB() {
-		ConnectionFile.Connection();
 		database = ConnectionFile.database;
 	}
 
