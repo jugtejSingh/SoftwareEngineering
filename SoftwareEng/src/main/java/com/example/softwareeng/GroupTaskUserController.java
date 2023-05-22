@@ -21,6 +21,7 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GroupTaskUserController implements Initializable {
@@ -195,8 +196,14 @@ public class GroupTaskUserController implements Initializable {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                groupConn.deletingTasks(label.getText());
-                DisplayingTasks(groupIDForMission7);
+                ButtonType foo = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+                ButtonType bar = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure you want to deleted?", foo, bar);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.orElse(bar) == foo) {
+                    groupConn.deletingTasks(label.getText());
+                    DisplayingTasks(groupIDForMission7);
+                }
             }
         });
         hbox.getChildren().add(button);

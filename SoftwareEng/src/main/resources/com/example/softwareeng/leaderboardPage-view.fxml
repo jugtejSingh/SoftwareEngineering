@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.LeaderboardController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.LeaderboardController">
    <children>
-      <VBox fx:id="VboxLeaderboard" layoutX="250.0" layoutY="79.0" prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <Button mnemonicParsing="false" text="Button" />
-            <Button mnemonicParsing="false" text="Button" />
-            <Button mnemonicParsing="false" text="Button" />
-         </children></VBox>
-      <RadioButton layoutX="46.0" layoutY="330.0" mnemonicParsing="false" text="RadioButton" />
+      <TableView layoutX="71.0" layoutY="71.0" prefHeight="242.0" prefWidth="482.0">
+        <columns>
+          <TableColumn fx:id="NameColumn" prefWidth="168.79998779296875" text="Name" />
+          <TableColumn fx:id="RankColumn" minWidth="0.0" prefWidth="108.0" text="Rank" />
+            <TableColumn fx:id="PointsColumn" minWidth="0.0" prefWidth="92.79998779296875" text="Points" />
+            <TableColumn fx:id="StreakColumn" prefWidth="92.0" text="Streak" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

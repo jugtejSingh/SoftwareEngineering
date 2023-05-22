@@ -1,12 +1,21 @@
 #vboxForTasks{
-    -fx-background-color: rgb(204, 255, 255);
+    -fx-background-color: rgb(215, 255, 255);
 }
 #groupsVbox{
-    -fx-background-color: rgb(204, 255, 255);
+    -fx-background-color: rgb(215, 255, 255);
 }
 .button{
-    -fx-background-color: lightblue;
+    -fx-background-color: rgb(215, 255, 255);
 }
 .separator{
-    -fx-background-color: red;
+    -fx-background-color: pink;
+}
+#header{
+    -fx-background-color: rgb(135, 206, 235);
+}
+#footer{
+    -fx-background-color: rgb(135, 206, 235);
+}
+#body {
+    -fx-background-color: rgb(135, 206, 235);
 }
