@@ -149,6 +149,7 @@ public class CreateTaskDB {
         String sqlString = new String("DELETE FROM users WHERE name = '" + userName + "';");
         boolean success = database.RunSQL(sqlString);
         String removingFromTaskandUsers = new String("DELETE FROM taskAndUsers where userID ='" + userID + "' ");
+        database.RunSQL(removingFromTaskandUsers);
         if (!success) {
             System.out.println("Failed to run query: " + sqlString);
         }

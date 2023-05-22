@@ -30,24 +30,34 @@ public class JobSorting {
         compareUsers(usersArrayList);
     }
 
+
     void compareUsers(ArrayList<Users> usersArrayList) {
         Collections.shuffle(usersArrayList);
+        ArrayList<Users> divisionOfWork = new ArrayList<>(usersArrayList);
         int sizeof = usersArrayList.get(0).getTaskList().size()-1;
         ArrayList<Tasks> finalAllocatedTasks = new ArrayList<>();
         //Checks the person with the lowest backLog.
         int totalTaskTime = sizeof+1;
+        Users lowestTimedUser = usersArrayList.get(0);
         for (int i = sizeof; i >= 0; i--) {
-            Users lowestTimedUser = usersArrayList.get(0);
             for (int p = 0; p < usersArrayList.size(); p++) {
-                if(lowestTimedUser.getNumberOfTask() > totalTaskTime/usersArrayList.size()){
-                    usersArrayList.remove(lowestTimedUser);
-                    break;
+                System.out.println("////////////////////////////////");
+                System.out.println(lowestTimedUser.getUserName()+"          "+usersArrayList.get(p).getUserName());
+                System.out.println(lowestTimedUser.getDivisionOfWork()+"        "+ usersArrayList.get(p).getDivisionOfWork());
+                System.out.println(lowestTimedUser.getNumberOfTask());
+                if((float)lowestTimedUser.getNumberOfTask() >= ((float)totalTaskTime/usersArrayList.size()+1)){
+                    if(p != usersArrayList.size()-1){
+                    lowestTimedUser = usersArrayList.get(p+1);
+                }else {
+                    lowestTimedUser = usersArrayList.get(p-1);
+                    }
                 }
                 if (lowestTimedUser.getDivisionOfWork() > usersArrayList.get(p).getDivisionOfWork()) {
-                    lowestTimedUser = usersArrayList.get(p);
+                        lowestTimedUser = usersArrayList.get(p);
+                    }
                 }
                 lowestTimedUser.setNumberOfTask(lowestTimedUser.getNumberOfTask()+1);
-            }//Finds the task which takes the highest time, If 0 the user is skipped for this task
+            //Finds the task which takes the highest time, If 0 the user is skipped for this task
             Tasks highestTask = lowestTimedUser.getTaskList().get(0);
             int highestTaskint = 0;
             for (int k = sizeof; k >= 0; k--) {
@@ -75,28 +85,31 @@ public class JobSorting {
             System.out.println(task.getUserName() + "    " + task.getTaskName() + "    " + task.getEstimatedTime());
         }
         float totalDivision =0;
-        for (Users user: usersArrayList) {
-            totalDivision = totalDivision + user.getDivisionOfWork();
+        for (int i = 0; i < divisionOfWork.size(); i++){
+            System.out.println(divisionOfWork.get(i).getUserName() + "       " + divisionOfWork.get(i).getDivisionOfWork());
         }
-        for (Users user:usersArrayList) {
-
-            Float average = totalDivision/(float)usersArrayList.size();
-            System.out.println(average);
+        for (Users user: divisionOfWork) {
+            totalDivision = totalDivision + user.getDivisionOfWork();
+            System.out.println(totalDivision);
+        }
+        for (Users user:divisionOfWork) {
+            Float average = totalDivision /(float)usersArrayList.size();
             if (user.getDivisionOfWork() > average){
                 float backlog = user.getDivisionOfWork() - average;
                 jobDB.insertBacklog(user.userID,backlog);
+            } else {
+                jobDB.insertBacklog(user.userID,0);
             }
         }
     }
     Tasks timeAddition(Tasks task){
-            LocalDateTime timeNow = LocalDateTime.now();
-            if (task.getWeeklyDaily() == 0){
-                task.setTimeTillCompletition(timeNow.plusDays(7));
-            } else {
-                task.setTimeTillCompletition(timeNow.plusDays(task.getWeeklyDaily()));
-            }
-            return task;
+        LocalDateTime timeNow = LocalDateTime.now();
+        if (task.getWeeklyDaily() == 0){
+            task.setTimeTillCompletition(timeNow.plusDays(7));
+        } else {
+            task.setTimeTillCompletition(timeNow.plusDays(task.getWeeklyDaily()));
         }
+        return task;
     }
-
+}
 
