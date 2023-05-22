@@ -244,7 +244,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(css);
         Stage stageForTask = new Stage();
-        stageForTask.setTitle("Hello!");
+        stageForTask.setTitle("Adding Task Screen");
         stageForTask.setScene(scene);
         stageForTask.show();
         stageForTask.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -259,7 +259,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
                     throw new RuntimeException(e);
                 }
                 scene.getStylesheets().add(cssGroup);
-                stage.setTitle("Hello!");
+                stage.setTitle("Group Screen");
                 stage.setScene(scene);
                 stage.show();
             }
@@ -273,7 +273,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
         FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("creatingUser-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageForUser = new Stage();
-        stageForUser.setTitle("Hello!");
+        stageForUser.setTitle("Adding User Screen");
         stageForUser.setScene(scene);
         stageForUser.show();
         stageForUser.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -288,7 +288,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
                     throw new RuntimeException(e);
                 }
                 scene.getStylesheets().add(cssGroup);
-                stage.setTitle("Hello!");
+                stage.setTitle("Group Screen");
                 stage.setScene(scene);
                 stage.show();
             }
@@ -303,7 +303,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
         FXMLLoader fxmlLoader = new FXMLLoader(CreateTaskController.class.getResource("creatingGroup-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageForGroups = new Stage();
-        stageForGroups.setTitle("Hello!");
+        stageForGroups.setTitle("Adding Group Screen");
         stageForGroups.setScene(scene);
         stageForGroups.show();
         stageForGroups.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -318,7 +318,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
                     throw new RuntimeException(e);
                 }
                 scene.getStylesheets().add(cssGroup);
-                stage.setTitle("Home Screen");
+                stage.setTitle("Group Screen");
                 stage.setScene(scene);
                 stage.show();
             }
@@ -332,7 +332,7 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
         String cssGroup = this.getClass().getResource("taskListScreen-css.css").toExternalForm();
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageForTasksList = new Stage();
-        stageForTasksList.setTitle("Hello!");
+        stageForTasksList.setTitle("Task List Screen");
         stageForTasksList.setScene(scene);
         stageForTasksList.show();
         stageForTasksList.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -347,7 +347,35 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
                     throw new RuntimeException(e);
                 }
                 scene.getStylesheets().add(cssGroup);
-                stage.setTitle("Hello!");
+                stage.setTitle("Group Screen");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+    }
+    @FXML
+    void openMission10() throws IOException {
+        Stage stage = (Stage)scrollPaneTasks.getScene().getWindow();
+        stage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("mission10-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stageForTasksList = new Stage();
+        stageForTasksList.setTitle("Mission 10 Screen");
+        stageForTasksList.setScene(scene);
+        stageForTasksList.show();
+        stageForTasksList.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("groupScreen-view.fxml"));
+                String cssGroup = this.getClass().getResource("groupScreen-css.css").toExternalForm();
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                scene.getStylesheets().add(cssGroup);
+                stage.setTitle("Group Screen");
                 stage.setScene(scene);
                 stage.show();
             }

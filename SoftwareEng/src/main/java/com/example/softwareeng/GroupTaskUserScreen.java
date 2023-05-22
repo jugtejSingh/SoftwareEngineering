@@ -14,7 +14,7 @@ public class GroupTaskUserScreen extends Application {
             String cssGroup = this.getClass().getResource("groupScreen-css.css").toExternalForm();
             Scene scene = new Scene(fxmlLoader.load());
             scene.getStylesheets().add(cssGroup);
-            stage.setTitle("Hello!");
+            stage.setTitle("Group Screen");
             stage.setScene(scene);
             stage.show();
         }

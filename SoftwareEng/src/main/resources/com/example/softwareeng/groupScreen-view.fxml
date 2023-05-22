@@ -12,6 +12,7 @@
          <children>
             <Label alignment="CENTER" prefHeight="50.0" prefWidth="766.0" text="Groups" />
             <Button layoutX="688.0" layoutY="16.0" mnemonicParsing="false" onAction="#openingTaskList" text="Task List" />
+            <Button layoutX="36.0" layoutY="12.0" mnemonicParsing="false" onAction="#openMission10" text="Mission10" />
          </children></AnchorPane>
       <ScrollPane layoutX="2.0" layoutY="56.0" prefHeight="350.0" prefWidth="150.0">
          <content>

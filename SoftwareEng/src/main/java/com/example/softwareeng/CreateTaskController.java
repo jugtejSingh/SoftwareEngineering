@@ -22,7 +22,7 @@ public class CreateTaskController implements Initializable {
     CreateTaskDB db = new CreateTaskDB();
     HashMap<String,Integer> mapForChoiceBox;
     int lastNumberForHashMap = 0;
-//Initializer for data in the choice boxes
+    //Initializer for data in the choice boxes
     void AddingUsersToChoice(){
         ArrayList<Users> users = new ArrayList<>(db.GetUsers());
         for (int i = 0; i < users.size(); i++) {
@@ -37,12 +37,12 @@ public class CreateTaskController implements Initializable {
     void addingTasksAndEstimates() throws InterruptedException {
         mapForChoiceBox.put(choiceBox.getItems().get((Integer) lastNumberForHashMap), Integer.parseInt(timeEstimate.getText()));
         boolean wentThrough = false;
-            String tasksName = taskName.getText();
-            int taskID = db.InsertIntoTask(groupSelectedID, tasksName);
-            for (String names : mapForChoiceBox.keySet()) {
-                int userID = db.GettingUserIds(names);
-                wentThrough = db.InsertIntoTaskAndUsers(userID, groupSelectedID, mapForChoiceBox.get(names), taskID);
-            }
+        String tasksName = taskName.getText();
+        int taskID = db.InsertIntoTask(groupSelectedID, tasksName);
+        for (String names : mapForChoiceBox.keySet()) {
+            int userID = db.GettingUserIds(names);
+            wentThrough = db.InsertIntoTaskAndUsers(userID, groupSelectedID, mapForChoiceBox.get(names), taskID);
+        }
         Alert alert;
         if(wentThrough){
             alert = new Alert(Alert.AlertType.INFORMATION, "The task has been added", ButtonType.CLOSE);
@@ -62,17 +62,16 @@ public class CreateTaskController implements Initializable {
         timeEstimate.setText("0");
         AddingUsersToChoice();
         choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                try{ int estimatedTime = Integer.parseInt(timeEstimate.getText());
-                    mapForChoiceBox.put(choiceBox.getItems().get((Integer)number), estimatedTime);
-                timeEstimate.setText(String.valueOf(mapForChoiceBox.get(choiceBox.getItems().get((Integer)t1))));
-                lastNumberForHashMap = (int) t1;
-                }catch(Exception e){
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION,"The value added is not an integer", ButtonType.CLOSE);
-                    alert.showAndWait();
-                }}
-            }
+                                                                              @Override
+                                                                              public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                                                                                  try{ int estimatedTime = Integer.parseInt(timeEstimate.getText());
+                                                                                      mapForChoiceBox.put(choiceBox.getItems().get((Integer)number), estimatedTime);
+                                                                                      timeEstimate.setText(String.valueOf(mapForChoiceBox.get(choiceBox.getItems().get((Integer)t1))));
+                                                                                      lastNumberForHashMap = (int) t1;
+                                                                                  }catch(Exception e){
+                                                                                      Alert alert = new Alert(Alert.AlertType.INFORMATION,"The value added is not an integer", ButtonType.CLOSE);
+                                                                                      alert.showAndWait();}}
+        }
         );
         for (String x: arraylistOfNames) {
             System.out.println(mapForChoiceBox.get(x));

@@ -10,6 +10,16 @@ public class Users {
 
     int numberOfTask;
 
+    int tempTaskCount;
+
+    public int getTempTaskCount() {
+        return tempTaskCount;
+    }
+
+    public void setTempTaskCount(int tempTaskCount) {
+        this.tempTaskCount = tempTaskCount;
+    }
+
     public int getNumberOfTask() {
         return numberOfTask;
     }

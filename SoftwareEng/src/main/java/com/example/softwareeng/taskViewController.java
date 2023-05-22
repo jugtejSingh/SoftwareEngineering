@@ -34,6 +34,10 @@ public class taskViewController implements Initializable {
     }
     String AddingUsersToChoice(){
         ArrayList<Users> users = new ArrayList<>(taskDB.GetUsers());
+        Alert alert;
+        if(users.size() == 0){
+            alert = new Alert(Alert.AlertType.INFORMATION, "There are no users in this group", ButtonType.CLOSE);
+        }
         for (int i = 0; i < users.size(); i++) {
             Users newUser = users.get(i);
             choiceBox.setValue(users.get(0).getUserName());
@@ -53,7 +57,15 @@ public class taskViewController implements Initializable {
             int userID = taskDB.GettingUserIds(names);
             taskDB.UpdateTaskAndUsers(userID, mapForChoiceBox.get(names), taskID, taskName);
         }
+        Alert alert;
+        if(testing){
+            alert = new Alert(Alert.AlertType.INFORMATION, "The task has been added", ButtonType.CLOSE);
+        }else{
+            alert = new Alert(Alert.AlertType.INFORMATION, "The task could not be added, Try again later.", ButtonType.CLOSE);
+        }
+        alert.showAndWait();
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         taskNameField.setText(taskName);
@@ -63,12 +75,13 @@ public class taskViewController implements Initializable {
         ArrayList<String> arraylistOfNames = new ArrayList<>(taskDB.GetUserNames());
         for (String x: arraylistOfNames) {
             int userID = taskDB.GettingUserIds(x);
-            int timeEstimatePerUser = taskDB.GettingEstimateTime(userID);
+            int timeEstimatePerUser = taskDB.GettingEstimateTime(userID,taskID);
             mapForChoiceBox.put(x,timeEstimatePerUser);
+            System.out.println("TimePerUserEstimate");
             System.out.println(mapForChoiceBox.get(x));
         }
         int userID = taskDB.GettingUserIds(firstUser);
-        int timeEstimateForFirst = taskDB.GettingEstimateTime(userID);
+        int timeEstimateForFirst = taskDB.GettingEstimateTime(userID,taskID);
         timeEstimate.setText(Integer.toString(timeEstimateForFirst));
                 choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override

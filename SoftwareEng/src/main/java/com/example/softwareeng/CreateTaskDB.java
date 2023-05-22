@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class CreateTaskDB {
-    private DBConnection database;
+    final DBConnection database;
 
     static int groupID = 0;
 
@@ -58,8 +58,8 @@ public class CreateTaskDB {
         }
         return usersID;
     }
-    int GettingEstimateTime(int userID) {
-        String userCount = new String("Select estimatedTime from taskAndUsers where userID = '" + userID + "';");
+    int GettingEstimateTime(int userID,int taskID) {
+        String userCount = new String("Select estimatedTime from taskAndUsers where userID = '" + userID + "' AND taskID = '"+taskID+"';");
         ResultSet usersTimeRetrival = database.RunSQLQuery(userCount);
         int estimatedTime = 0;
         try {
