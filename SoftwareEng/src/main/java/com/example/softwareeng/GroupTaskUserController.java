@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -70,13 +71,17 @@ public class GroupTaskUserController implements Initializable {
         vboxForTasks.getChildren().clear();
         ArrayList<Tasks> taskArrayList = new ArrayList<>(groupConn.GetTasks(groupIdForTasks));
         for (int i = 0; i < taskArrayList.size(); i++) {
-            HBox hboxesForCheckboxes = new HBox();
+            HBox hboxesForCheckboxes = new HBox(10);
+            hboxesForCheckboxes.setAlignment(Pos.CENTER_LEFT);
             vboxForTasks.getChildren().add(hboxesForCheckboxes);
             Separator sep = new Separator();
             vboxForTasks.getChildren().add(sep);
             Tasks task = taskArrayList.get(i);
             Label label = new Label(task.getTaskName());
             hboxesForCheckboxes.getChildren().add(label);
+            Region region = new Region();
+            hboxesForCheckboxes.getChildren().add(region);
+            HBox.setHgrow(region,Priority.ALWAYS);
             AddingCheckboxesForDays(hboxesForCheckboxes);
             addingDelete(hboxesForCheckboxes);
             buttonModification(hboxesForCheckboxes);
@@ -227,6 +232,8 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
         }
     JobSorting jobSorting = new JobSorting(jobDB);
         jobSorting.sortTimes(userList);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"The tasks have been submitted", ButtonType.CLOSE);
+        alert.showAndWait();
     }
     @FXML
     void makingTaskAdding() throws IOException {

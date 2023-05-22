@@ -41,7 +41,7 @@ public class CreatingGroupViewController implements Initializable {
 
     @FXML
     void AddingGroups() {
-        if (Pattern.matches("[a-zA-Z]+",textFieldForGroup.getText())) {
+        if (Pattern.matches("[a-zA-Z ]+",textFieldForGroup.getText())) {
             db.InsertingGroups(textFieldForGroup.getText());
             Alert alert = new Alert(Alert.AlertType.INFORMATION,"The group has been added", ButtonType.CLOSE);
             alert.showAndWait();

@@ -41,10 +41,10 @@ public class JobSorting {
         Users lowestTimedUser = usersArrayList.get(0);
         for (int i = sizeof; i >= 0; i--) {
             for (int p = 0; p < usersArrayList.size(); p++) {
-                System.out.println("////////////////////////////////");
-                System.out.println(lowestTimedUser.getUserName()+"          "+usersArrayList.get(p).getUserName());
-                System.out.println(lowestTimedUser.getDivisionOfWork()+"        "+ usersArrayList.get(p).getDivisionOfWork());
-                System.out.println(lowestTimedUser.getNumberOfTask());
+//                System.out.println("////////////////////////////////");
+//                System.out.println(lowestTimedUser.getUserName()+"          "+usersArrayList.get(p).getUserName());
+//                System.out.println(lowestTimedUser.getDivisionOfWork()+"        "+ usersArrayList.get(p).getDivisionOfWork());
+//                System.out.println(lowestTimedUser.getNumberOfTask());
                 if((float)lowestTimedUser.getNumberOfTask() >= ((float)totalTaskTime/usersArrayList.size()+1)){
                     if(p != usersArrayList.size()-1){
                     lowestTimedUser = usersArrayList.get(p+1);
@@ -64,7 +64,7 @@ public class JobSorting {
                 if(lowestTimedUser.getTaskList().get(k).getEstimatedTime() == 0){
                     break;
                 }
-                else if (highestTask.getEstimatedTime() < lowestTimedUser.getTaskList().get(k).getEstimatedTime()) {
+                else if (highestTask.getEstimatedTime() > lowestTimedUser.getTaskList().get(k).getEstimatedTime()) {
                     highestTask = lowestTimedUser.getTaskList().get(k);
                     highestTaskint = k;
                 }

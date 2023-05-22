@@ -41,7 +41,7 @@ CreateTaskDB db = new CreateTaskDB();
     }
     @FXML
     void addingUsersToDatabase(){
-        if (Pattern.matches("[a-zA-Z]+",userNameField.getText())) {
+        if (Pattern.matches("[a-zA-Z ]+",userNameField.getText())) {
             db.InsertingUsers(groupIDforUserIDInsert,userNameField.getText());
             ArrayList<Integer> taskIDList = db.GetTaskIDs(groupIDforUserIDInsert);
             int userID = db.GettingUserIds(userNameField.getText());

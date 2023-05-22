@@ -45,9 +45,9 @@ public class CreateTaskController implements Initializable {
             }
         Alert alert;
         if(wentThrough){
-            alert = new Alert(Alert.AlertType.INFORMATION, "The user has been added", ButtonType.CLOSE);
+            alert = new Alert(Alert.AlertType.INFORMATION, "The task has been added", ButtonType.CLOSE);
         }else{
-            alert = new Alert(Alert.AlertType.INFORMATION, "The user could not be added, Try again later.", ButtonType.CLOSE);
+            alert = new Alert(Alert.AlertType.INFORMATION, "The task could not be added, Try again later.", ButtonType.CLOSE);
         }
         alert.showAndWait();
     }

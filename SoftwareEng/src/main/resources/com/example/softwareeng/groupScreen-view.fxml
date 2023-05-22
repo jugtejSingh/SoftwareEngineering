@@ -6,26 +6,30 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.GroupTaskUserController">
+<AnchorPane prefWidth="768.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.softwareeng.GroupTaskUserController">
    <children>
       <AnchorPane layoutX="1.0" layoutY="4.0" prefHeight="42.0" prefWidth="764.0">
          <children>
             <Label alignment="CENTER" prefHeight="50.0" prefWidth="766.0" text="Groups" />
-            <Button layoutX="690.0" layoutY="16.0" mnemonicParsing="false" onAction="#openingTaskList" text="Task List" />
+            <Button layoutX="688.0" layoutY="16.0" mnemonicParsing="false" onAction="#openingTaskList" text="Task List" />
          </children></AnchorPane>
-      <ScrollPane layoutX="7.0" layoutY="63.0" prefHeight="370.0" prefWidth="147.0">
+      <ScrollPane layoutX="2.0" layoutY="56.0" prefHeight="350.0" prefWidth="150.0">
          <content>
-            <VBox fx:id="groupsVbox" prefHeight="363.0" prefWidth="147.0" scaleZ="2.0" />
+            <VBox fx:id="groupsVbox" prefHeight="350.0" prefWidth="144.0" scaleZ="2.0" />
          </content>
       </ScrollPane>
-      <ScrollPane fx:id="scrollPaneTasks" layoutX="154.0" layoutY="57.0" prefHeight="381.0" prefWidth="613.0">
+      <ScrollPane fx:id="scrollPaneTasks" layoutX="154.0" layoutY="57.0" maxHeight="350.0" maxWidth="614.0" prefHeight="378.0" prefWidth="614.0">
          <content>
-            <VBox fx:id="vboxForTasks" prefHeight="378.0" prefWidth="614.0" stylesheets="@groupScreen-css.css" />
+            <VBox fx:id="vboxForTasks" maxHeight="378.0" maxWidth="614.0" prefHeight="358.0" prefWidth="595.0" stylesheets="@groupScreen-css.css" />
          </content>
       </ScrollPane>
-      <Button layoutX="715.0" layoutY="445.0" mnemonicParsing="false" onAction="#submittingTasks" text="Submit" />
-      <Button fx:id="addingUsers" layoutX="257.0" layoutY="445.0" mnemonicParsing="false" onAction="#addingUser" text="New User" />
-      <Button layoutX="471.0" layoutY="445.0" mnemonicParsing="false" onMouseClicked="#makingTaskAdding" text="New Task" />
-      <Button layoutX="50.0" layoutY="445.0" mnemonicParsing="false" onAction="#addingGroup" text="New Group" />
+      <AnchorPane layoutY="406.0" prefHeight="62.0" prefWidth="768.0">
+         <children>
+            <Button layoutX="672.0" layoutY="22.0" mnemonicParsing="false" onAction="#submittingTasks" text="Submit" />
+            <Button fx:id="addingUsers" layoutX="239.0" layoutY="22.0" mnemonicParsing="false" onAction="#addingUser" text="New User" />
+            <Button layoutX="441.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#makingTaskAdding" text="New Task" />
+            <Button layoutX="51.0" layoutY="22.0" mnemonicParsing="false" onAction="#addingGroup" text="New Group" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
