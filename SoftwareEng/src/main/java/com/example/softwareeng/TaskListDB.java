@@ -20,8 +20,7 @@ public class TaskListDB {
     private LocalDate currentWeekEnd;
 
     public TaskListDB() {
-        database = new DBConnection();
-        database.Connect("TaskManagerDB.sqlite");
+        database = ConnectionFile.database;
         this.currentWeekStart=getCurrentWeekStart();
         this.currentWeekEnd=getCurrentWeekEnd();
     }

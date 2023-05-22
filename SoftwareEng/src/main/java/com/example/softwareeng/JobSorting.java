@@ -1,7 +1,5 @@
 package com.example.softwareeng;
 
-
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,24 +34,35 @@ public class JobSorting {
         Collections.shuffle(usersArrayList);
         int sizeof = usersArrayList.get(0).getTaskList().size()-1;
         ArrayList<Tasks> finalAllocatedTasks = new ArrayList<>();
+        //Checks the person with the lowest backLog.
+        int totalTaskTime = sizeof+1;
         for (int i = sizeof; i >= 0; i--) {
-            Users lowestTime = usersArrayList.get(0);
+            Users lowestTimedUser = usersArrayList.get(0);
             for (int p = 0; p < usersArrayList.size(); p++) {
-                if (lowestTime.getDivisionOfWork() > usersArrayList.get(p).getDivisionOfWork()) {
-                    lowestTime = usersArrayList.get(p);
+                if(lowestTimedUser.getNumberOfTask() > totalTaskTime/usersArrayList.size()){
+                    usersArrayList.remove(lowestTimedUser);
+                    break;
                 }
-            }
-            Tasks highestTask = lowestTime.getTaskList().get(0);
+                if (lowestTimedUser.getDivisionOfWork() > usersArrayList.get(p).getDivisionOfWork()) {
+                    lowestTimedUser = usersArrayList.get(p);
+                }
+                lowestTimedUser.setNumberOfTask(lowestTimedUser.getNumberOfTask()+1);
+            }//Finds the task which takes the highest time, If 0 the user is skipped for this task
+            Tasks highestTask = lowestTimedUser.getTaskList().get(0);
             int highestTaskint = 0;
             for (int k = sizeof; k >= 0; k--) {
-                if (highestTask.getEstimatedTime() < lowestTime.getTaskList().get(k).getEstimatedTime()) {
-                    highestTask = lowestTime.getTaskList().get(k);
+                if(lowestTimedUser.getTaskList().get(k).getEstimatedTime() == 0){
+                    break;
+                }
+                else if (highestTask.getEstimatedTime() < lowestTimedUser.getTaskList().get(k).getEstimatedTime()) {
+                    highestTask = lowestTimedUser.getTaskList().get(k);
                     highestTaskint = k;
                 }
             }
-            float temp = (float) (lowestTime.getDivisionOfWork() + highestTask.getEstimatedTime());
-            lowestTime.setDivisionOfWork(temp);
-            highestTask.setUserName(lowestTime.userName);
+            //Adding the estimated time to division of work which is the accumulation of all the task work the user will conduct
+            float temp = (float) (lowestTimedUser.getDivisionOfWork() + highestTask.getEstimatedTime());
+            lowestTimedUser.setDivisionOfWork(temp);
+            highestTask.setUserName(lowestTimedUser.userName);
             Tasks tempTask =  timeAddition(highestTask);
             finalAllocatedTasks.add(tempTask);
             jobDB.addingToTempTable(tempTask);

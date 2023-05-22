@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 
 public class CreateTaskController implements Initializable {
     @FXML
@@ -21,7 +20,6 @@ public class CreateTaskController implements Initializable {
     TextField timeEstimate;
     static int groupSelectedID = 1;
     CreateTaskDB db = new CreateTaskDB();
-
     HashMap<String,Integer> mapForChoiceBox;
     int lastNumberForHashMap = 0;
 //Initializer for data in the choice boxes
@@ -36,15 +34,22 @@ public class CreateTaskController implements Initializable {
     //Make the groupID static everytime they click it, send it to the controller class
     @FXML
     //Event handler for the button
-    void addingTasksAndEstimates() {
+    void addingTasksAndEstimates() throws InterruptedException {
         mapForChoiceBox.put(choiceBox.getItems().get((Integer) lastNumberForHashMap), Integer.parseInt(timeEstimate.getText()));
-
+        boolean wentThrough = false;
             String tasksName = taskName.getText();
             int taskID = db.InsertIntoTask(groupSelectedID, tasksName);
             for (String names : mapForChoiceBox.keySet()) {
-                int userID = db.gettingUserIds(names);
-                db.InsertIntoTaskAndUsers(userID, groupSelectedID, mapForChoiceBox.get(names), taskID);
+                int userID = db.GettingUserIds(names);
+                wentThrough = db.InsertIntoTaskAndUsers(userID, groupSelectedID, mapForChoiceBox.get(names), taskID);
             }
+        Alert alert;
+        if(wentThrough){
+            alert = new Alert(Alert.AlertType.INFORMATION, "The user has been added", ButtonType.CLOSE);
+        }else{
+            alert = new Alert(Alert.AlertType.INFORMATION, "The user could not be added, Try again later.", ButtonType.CLOSE);
+        }
+        alert.showAndWait();
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

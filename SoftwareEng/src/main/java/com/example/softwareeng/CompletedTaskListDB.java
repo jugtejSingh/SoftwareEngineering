@@ -33,8 +33,7 @@ public class CompletedTaskListDB {
 
     //create database connection and set current week start and end
     public CompletedTaskListDB() {
-        database = new DBConnection();
-        database.Connect("TaskManagerDB.sqlite");
+        database = ConnectionFile.database;
         this.currentWeekStart=getCurrentWeekStart();
         this.currentWeekEnd=getCurrentWeekEnd();
     }

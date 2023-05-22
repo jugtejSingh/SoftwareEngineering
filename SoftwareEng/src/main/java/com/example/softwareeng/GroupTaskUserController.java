@@ -29,7 +29,7 @@ public class GroupTaskUserController implements Initializable {
     ScrollPane scrollPaneTasks;
     @FXML
     VBox groupsVbox;
-    GroupTaskUserDB groupConn;
+    GroupTaskUserDB groupConn = new GroupTaskUserDB();
     ArrayList<Tasks> taskAndDaysArrayList = new ArrayList<>();
     int groupIDForMission7 = 0;
 
@@ -38,11 +38,11 @@ public class GroupTaskUserController implements Initializable {
         CreateTaskController.groupSelectedID = groupIDforTasks;
         CreateTaskDB.groupID = groupIDforTasks;
         CreatingUserViewController.groupIDforUserIDInsert = groupIDforTasks;
+        taskViewController.groupSelectedID = groupIDforTasks;
         groupIDForMission7 = groupIDforTasks;
         DisplayingTasks(groupIDforTasks);
     }
     void DisplayingGroups() {
-        groupConn = new GroupTaskUserDB();
         Label label1;
         ArrayList<Group> groupArrayList = new ArrayList<>(groupConn.GetGroups());
         for (int p = 0; p < groupArrayList.size(); p++) {
@@ -58,6 +58,7 @@ public class GroupTaskUserController implements Initializable {
                     CreateTaskController.groupSelectedID = idOfGroup;
                     CreateTaskDB.groupID = idOfGroup;
                     CreatingUserViewController.groupIDforUserIDInsert = idOfGroup;
+                    taskViewController.groupSelectedID = idOfGroup;
                     groupIDForMission7 = idOfGroup;
                     DisplayingTasks(groupName.getId());
                 }
@@ -65,7 +66,6 @@ public class GroupTaskUserController implements Initializable {
         }
     }
     void DisplayingTasks(int groupIdForTasks) {
-        groupConn = new GroupTaskUserDB();
         vboxForTasks.getChildren().clear();
         ArrayList<Tasks> taskArrayList = new ArrayList<>(groupConn.GetTasks(groupIdForTasks));
         for (int i = 0; i < taskArrayList.size(); i++) {
@@ -78,11 +78,52 @@ public class GroupTaskUserController implements Initializable {
             hboxesForCheckboxes.getChildren().add(label);
             AddingCheckboxesForDays(hboxesForCheckboxes);
             addingDelete(hboxesForCheckboxes);
+            buttonModification(hboxesForCheckboxes);
         }
     }
+    void buttonModification(HBox hBox){
+        Button buttonForModify = new Button("Update");
+        buttonForModify.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ObservableList<Node> node = hBox.getChildren();
+                Label label = (Label)node.get(0);
+                taskViewController.taskName = label.getText();
+                Stage stage = (Stage)scrollPaneTasks.getScene().getWindow();
+                stage.close();
+                FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("taskModify-view.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Stage stageForTasksList = new Stage();
+                stageForTasksList.setTitle("Modify");
+                stageForTasksList.setScene(scene);
+                stageForTasksList.show();
+                stageForTasksList.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        FXMLLoader fxmlLoader = new FXMLLoader(GroupTaskUserScreen.class.getResource("groupScreen-view.fxml"));
+                        String cssGroup = this.getClass().getResource("groupScreen-css.css").toExternalForm();
+                        Scene scene = null;
+                        try {
+                            scene = new Scene(fxmlLoader.load());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        stage.setTitle("Hello!");
+                        stage.setScene(scene);
+                        stage.show();
+                        DisplayingTasks(groupIDForMission7);
+                    }
+                });
+            }
+            });
+        hBox.getChildren().add(buttonForModify);
+        }
     void AddingCheckboxesForDays(HBox hBox) {
-        Region region = new Region();
-        region.maxWidth(100);
         ToggleGroup toggleGroup = new ToggleGroup();
         RadioButton Weekly = new RadioButton("Weekly");
         RadioButton Daily = new RadioButton("Daily");
@@ -135,15 +176,14 @@ public class GroupTaskUserController implements Initializable {
                         }
                     }
                 }}});
-        hBox.getChildren().add(region);
         hBox.getChildren().add(Weekly);
         hBox.getChildren().add(Daily);
         hBox.getChildren().add(Ignore);
+
     }
     void addingDelete(HBox hbox){
         ObservableList<Node> node = hbox.getChildren();
         Label label = (Label)node.get(0);
-        System.out.println(label.getText());
         Button button = new Button();
         button.setText("Delete");
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -275,8 +315,6 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
                 stage.show();
             }
         });
-
-
     }
     @FXML
     void openingTaskList() throws IOException {
@@ -306,7 +344,6 @@ ArrayList<Tasks> gettingTheTaskArrayList(int groupIDForMission7){
                 stage.show();
             }
         });
-
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

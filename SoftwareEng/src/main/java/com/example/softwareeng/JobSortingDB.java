@@ -8,8 +8,7 @@ public class JobSortingDB {
     private DBConnection database;
 
     public JobSortingDB() {
-        database = new DBConnection();
-        database.Connect("TaskManagerDB.sqlite");
+        database = ConnectionFile.database;
     }
     public ArrayList<Users> getUsers(int groupID){
         String sqlString = new String("SELECT name, userID from users where groupID = '"+groupID+"';");

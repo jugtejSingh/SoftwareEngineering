@@ -8,6 +8,21 @@ public class Users {
     float backlog;
     float divisionOfWork;
 
+    int numberOfTask;
+
+    public int getNumberOfTask() {
+        return numberOfTask;
+    }
+
+    public int ge() {
+        return numberOfTask;
+    }
+
+    public void setNumberOfTask(int amountOfTime) {
+        this.numberOfTask = amountOfTime;
+    }
+
+
     public void setBacklog(float backlog) {
         this.backlog = backlog;
     }

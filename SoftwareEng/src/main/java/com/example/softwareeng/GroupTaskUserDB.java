@@ -4,11 +4,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class GroupTaskUserDB {
-	private DBConnection database;
+	DBConnection database;
 
 	public GroupTaskUserDB() {
-		database = new DBConnection();
-		database.Connect("TaskManagerDB.sqlite");
+		ConnectionFile.Connection();
+		database = ConnectionFile.database;
 	}
 
 	void InsertingGroups(String userName) {

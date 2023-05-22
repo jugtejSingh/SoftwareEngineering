@@ -43,6 +43,11 @@ CreateTaskDB db = new CreateTaskDB();
     void addingUsersToDatabase(){
         if (Pattern.matches("[a-zA-Z]+",userNameField.getText())) {
             db.InsertingUsers(groupIDforUserIDInsert,userNameField.getText());
+            ArrayList<Integer> taskIDList = db.GetTaskIDs(groupIDforUserIDInsert);
+            int userID = db.GettingUserIds(userNameField.getText());
+            for (int i = 0; i < taskIDList.size();i++){
+            db.InsertIntoTaskAndUsers(userID,groupIDforUserIDInsert,0,taskIDList.get(i));
+            }
             AddingUsersToChoiceBox();
             Alert alert = new Alert(Alert.AlertType.INFORMATION,"The user has been added", ButtonType.CLOSE);
             alert.showAndWait();
